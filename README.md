@@ -1,40 +1,86 @@
+# Web App
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+
+This is Next.js web app with api and blog.
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository and install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+git clone --depth=1 https://github.com/your-username/meonet.git  \
+    meonet.git \
+&& cd meonet.git \
+&& tree --gitignore \
+&& ls -FAlh
+````
+
+2. Run the development server:
+
+```bash
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Open [http://localhost:3000](http://localhost:3000) with your browser
+   to see the result.
 
-You can start editing the page by modifying `app/route.ts`. The page auto-updates as you edit the file.
+You can start editing the page by modifying `src/app/route.ts`.
+The page auto-updates as you edit the file.
 
-## Learn More
+4. Create an optimized production build:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Start the production server:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm start
+```
+## Deployment
 
-## Deploy on Vercel
+### Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?filter=next.js) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Check out [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-## API Routes
+1. Push to a Git repository
+2. Import into [Vercel](https://vercel.com/new)
+3. Environment variables will be auto-detected
 
-This directory contains example API routes for the headless API app.
+### Docker
 
-For more details, see [route.js file convention](https://nextjs.org/docs/app/api-reference/file-conventions/route).
+Build and run with:
+
+```bash
+docker build -t meonet .
+docker run -p 3000:3000 meonet
+```
+
+## Resources
+
+* [Next.js Documentation](https://nextjs.org/docs)
+- [route.js file convention](https://nextjs.org/docs/app/api-reference/file-conventions/route).
+* [Learn Next.js](https://nextjs.org/learn)
+* [Next.js on GitHub](https://github.com/vercel/next.js)
+- [Tailwind CSS Docs](https://tailwindcss.com/docs)
+- [Unified Markdown Processing](https://unifiedjs.com/)
+
+## License
+
+This project uses the [MIT License](LICENSE), allowing free use in personal
+and commercial projects.
+
+See the [LICENSE](LICENSE) file for full details.
+
+Third-party libraries may use different licenses - see [package.json](package.json) for details.
+
+---
+
+*Built with ❤️ by @CodeIter*
+
