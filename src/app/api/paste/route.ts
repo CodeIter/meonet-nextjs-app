@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     encryption,
     passwordHash,
     salt,
-    iv: iv?.toString("base64"),
+    iv: iv ? iv.toString("base64") : null,
     timestamp,
     syntax,
     keywords: keywords || [],
