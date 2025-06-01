@@ -4,7 +4,12 @@ import { urlStore } from "@/lib/stores"
 
 export async function POST(request: NextRequest) {
   const { url } = await request.json()
-  const ip = request.ip || request.headers.get("x-forwarded-for") || "unknown"
+
+  // Get IP address from headers
+  const ip = request.headers.get("x-forwarded-for") ||
+             request.headers.get("x-real-ip") ||
+             request.headers.get("cf-connecting-ip") ||
+             "unknown"
 
   if (!url) {
     return NextResponse.json({ error: "URL is required" }, { status: 400 })
