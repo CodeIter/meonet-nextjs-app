@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  meonet:
+    build: .
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      # These variables override Dockerfile ENV defaults at runtime.
+      # Their values come from the .env file.
+      - HOST=${HOST}
+      - HOSTNAME=${HOSTNAME}
+      - PORT=${PORT}
+    restart: unless-stopped
+
