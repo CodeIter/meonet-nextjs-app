@@ -1,4 +1,3 @@
-import { generateShortCode } from "./utils"
 
 interface UrlEntry {
   url: string

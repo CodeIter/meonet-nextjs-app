@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import { pasteStore } from "@/lib/stores"
-import crypto from "crypto"
 
 export async function GET(
   request: NextRequest,
@@ -14,6 +13,6 @@ export async function GET(
   }
 
   // Return without sensitive data
-  const { passwordHash, ...responseData } = paste
+  const { ...responseData } = paste
   return NextResponse.json(responseData)
 }

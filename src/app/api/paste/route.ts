@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
   const timestamp = new Date()
   let encryptedContent = content
   let passwordHash = null
-  let salt = null
+  const salt = null
   let iv = null
 
   if (encryption === "server" && password) {
