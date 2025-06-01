@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
 import { urlStore } from "@/lib/stores"
 
+interface ContextProps {
+  params: Promise<{ shortCode: string }>
+}
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { shortCode: string } }
+  { params }: ContextProps
 ) {
-  const { shortCode } = params
+  const { shortCode } = await params
   const entry = urlStore.get(shortCode)
 
   if (!entry) {

@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
 import { pasteStore } from "@/lib/stores"
 
+interface ContextProps {
+  params: Promise<{ id: string }>
+}
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: ContextProps
 ) {
-  const { id } = params
+  const { id } = await params
   const paste = pasteStore.get(id)
 
   if (!paste) {
