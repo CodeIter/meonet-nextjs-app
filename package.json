@@ -1,11 +1,33 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
+  "name": "web-app",
+  "version": "1.0.0",
+  "license": "MIT",
   "private": true,
+  "description": "Next.js web app with api and blog",
+  "keywords": [
+    "blog",
+    "markdown",
+    "nextjs",
+    "react",
+    "typescript",
+    "tailwindcss",
+    "api",
+    "frontend"
+  ],
+  "author": "Muhammad Amin Boubaker <muhammadaminboubaker@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/CodeIter/meonet.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/CodeIter/meonet/issues"
+  },
+  "homepage": "https://gitlab.com/CodeIter/meonet#readme",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
   "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977",
   "dependencies": {
