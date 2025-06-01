@@ -1,0 +1,45 @@
+# .dockerignore
+
+# Version Control
+.git
+.gitattributes
+.gitignore
+
+# Documentation files
+README.md
+
+# Cinfigyration files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Node.JS Artifacts
+node_modules
+
+# Next.Js
+.next
+dist
+
+# Environment variables dot-env files
+.env*
+
+# Log files
+*.log.txt
+*.log
+
+# Temp files
+files-data.txt
+
+# Editor temp files
+*.swp
+
+# # Backup files
+*.bak
+*.tmp
+*.orig
+*.rej
+
+# OS specific metadata files
+.DS_Store
+Thumbs.db
+
