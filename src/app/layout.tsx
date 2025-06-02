@@ -1,13 +1,26 @@
 import type { Metadata } from 'next'
-import Navigation from '../components/Navigation'
+import Navigation from '@/components/Navigation'
+import ClientIP from '@/components/ClientIP'
 import './globals.css'
+import packageJson from './package.json'
+
+// Extract author name and email
+const authorMatch = packageJson.author.match(/(.*)<(.*)>/)
+const authorName = authorMatch ? authorMatch[1].trim() : 'Unknown'
+const authorEmail = authorMatch ? authorMatch[2].trim() : 'Unknown'
+
+// Extract Git repo URL and username from package.json
+const repoUrl = packageJson.repository?.url || ''
+const usernameMatch = repoUrl.match(/(?:git@|https?:\/\/(?:www\.)?\w+\.\w+\/)([^/]+)\/([^/]+)/i)
+const gitUsername = usernameMatch ? usernameMatch[1] : 'Unknown'
+const repoName = usernameMatch ? usernameMatch[2].replace(/\.git$/, '') : 'repo'
 
 export const metadata: Metadata = {
   title: 'Web App - URL Shortener & Secure Pastebin',
   description: 'Fast and secure URL shortening and text sharing platform',
   keywords: ['url shortener', 'pastebin', 'secure', 'encryption', 'nextjs'],
-  authors: [{ name: 'Muhammad Amin Boubaker', email: 'muhammadaminboubaker@gmail.com' }],
-  creator: '@CodeIter',
+  authors: [{ name: authorName, email: authorEmail }],
+  creator: `@${gitUsername}`,
 }
 
 function Footer() {
@@ -15,16 +28,20 @@ function Footer() {
     <footer className="bg-gray-50 border-t">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center text-gray-600">
-          <p>&copy; 2025 Web App. Built with ❤️ by @CodeIter</p>
+          <p>&copy; 2025 Web App. Built with ❤️ by @{gitUsername}</p>
           <p className="mt-2 text-sm">
             MIT License - Free for personal and commercial use
           </p>
           <div className="mt-4 flex justify-center gap-4 text-sm">
-            <a href="https://nextjs.org" className="hover:text-blue-600 transition-colors">Next.js</a>
+            <a href="https://nextjs.org"  className="hover:text-blue-600 transition-colors">Next.js</a>
             <span>•</span>
-            <a href="https://tailwindcss.com" className="hover:text-blue-600 transition-colors">Tailwind CSS</a>
+            <a href="https://tailwindcss.com"  className="hover:text-blue-600 transition-colors">Tailwind CSS</a>
             <span>•</span>
-            <a href="https://gitlab.com/CodeIter/meonet" className="hover:text-blue-600 transition-colors">Source</a>
+            <a href={repoUrl}  className="hover:text-blue-600 transition-colors">Source</a>
+          </div>
+          {/* Add client IP component here */}
+          <div className="mt-4">
+            <ClientIP />
           </div>
         </div>
       </div>
