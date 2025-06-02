@@ -32,7 +32,8 @@
     ],
 
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "#/*": ["./*"]
     },
 
     "allowImportingTsExtensions": true,

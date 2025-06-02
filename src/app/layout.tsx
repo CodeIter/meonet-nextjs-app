@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
 import ClientIP from '@/components/ClientIP'
 import './globals.css'
-import packageJson from './package.json'
+import packageJson from '#/package.json'
 
 // Extract author name and email
 const authorMatch = packageJson.author.match(/(.*)<(.*)>/)
