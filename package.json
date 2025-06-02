@@ -14,7 +14,12 @@
     "api",
     "frontend"
   ],
-  "author": "Muhammad Amin Boubaker <muhammadaminboubaker@gmail.com>",
+  "author": {
+    "name": "Muhammad Amin Boubaker",
+    "username": "CodeIter",
+    "email": "muhammadaminboubaker@gmail.com",
+    "url": "https://github.com/CodeIter"
+  },
   "repository": {
     "type": "git",
     "url": "https://gitlab.com/CodeIter/meonet.git"

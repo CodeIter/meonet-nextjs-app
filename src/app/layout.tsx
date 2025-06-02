@@ -4,15 +4,13 @@ import ClientIP from '@/components/ClientIP'
 import './globals.css'
 import packageJson from '#/package.json'
 
-// Extract author name and email
-const authorMatch = packageJson.author.match(/(.*)<(.*)>/)
-const authorName = authorMatch ? authorMatch[1].trim() : 'Unknown'
-const authorEmail = authorMatch ? authorMatch[2].trim() : 'Unknown'
+// Get author name, username and email
+const authorName = packageJson.author.name || 'Anonymous'
+const authorEmail = packageJson.author.email || 'Unknown'
+const gitUsername = packageJson.author.username || 'Anonymous'
 
 // Extract Git repo URL and username from package.json
 const repoUrl = packageJson.repository?.url || ''
-const usernameMatch = repoUrl.match(/(?:git@|https?:\/\/(?:www\.)?\w+\.\w+\/)([^/]+)\/([^/]+)/i)
-const gitUsername = usernameMatch ? usernameMatch[1] : 'Unknown'
 
 export const metadata: Metadata = {
   title: 'Web App - URL Shortener & Secure Pastebin',
