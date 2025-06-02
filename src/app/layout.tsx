@@ -1,7 +1,11 @@
+
 import type { Metadata } from 'next'
+
+import './globals.css'
+
 import Navigation from '@/components/Navigation'
 import ClientIP from '@/components/ClientIP'
-import './globals.css'
+
 import packageJson from '#/package.json'
 
 // Get author name, username and email
