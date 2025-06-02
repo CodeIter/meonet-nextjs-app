@@ -8,6 +8,7 @@ import packageJson from '#/package.json'
 const authorName = packageJson.author.name || 'Anonymous'
 const authorEmail = packageJson.author.email || 'Unknown'
 const gitUsername = packageJson.author.username || 'Anonymous'
+const authorUrl = packageJson.author.url || packageJson.homepage
 
 // Extract Git repo URL and username from package.json
 const repoUrl = packageJson.repository?.url || ''
@@ -16,8 +17,9 @@ export const metadata: Metadata = {
   title: 'Web App - URL Shortener & Secure Pastebin',
   description: 'Fast and secure URL shortening and text sharing platform',
   keywords: ['url shortener', 'pastebin', 'secure', 'encryption', 'nextjs'],
-  authors: [{ name: authorName, email: authorEmail }],
-  creator: `@${gitUsername}`,
+  authors: [{ name: authorName, url: authorUrl }],
+  creator: gitUsername,
+  publisher: gitUsername
 }
 
 function Footer() {
