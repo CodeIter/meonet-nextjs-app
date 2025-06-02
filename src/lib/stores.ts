@@ -13,6 +13,7 @@ interface PasteEntry {
   passwordHash: string | null
   salt: string | null
   iv: string | null
+  cipher_algorithm: string | null
   timestamp: Date
   syntax?: string
   keywords?: string[]
@@ -39,6 +40,9 @@ export const urlStore = (() => {
     },
     size() {
       return store.size
+    },
+    getAll(): Array<[string, UrlEntry]> {
+      return Array.from(store.entries())
     }
   }
 })()
@@ -56,6 +60,9 @@ export const pasteStore = (() => {
     },
     size() {
       return store.size
+    },
+    getAll(): Array<[string, PasteEntry]> {
+      return Array.from(store.entries())
     }
   }
 })()

@@ -1,13 +1,20 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FileTextIcon, LockIcon, CopyIcon, CheckIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
+import Link from 'next/link'
+
+interface RecentPaste {
+  id: string
+  title: string
+  timestamp: Date
+}
 
 export default function PastePage() {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [syntax, setSyntax] = useState('')
-  const [encryption, setEncryption] = useState<'none' | 'server'>('none')
+  const [encryption, setEncryption] = useState<'none' | 'server' | 'client'>('none')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [keywords, setKeywords] = useState('')
@@ -15,6 +22,7 @@ export default function PastePage() {
   const [isLoading, setIsLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState('')
+  const [recentPastes, setRecentPastes] = useState<RecentPaste[]>([])
 
   const syntaxOptions = [
     { value: '', label: 'Plain Text' },
@@ -29,12 +37,71 @@ export default function PastePage() {
     { value: 'bash', label: 'Bash' },
   ]
 
+const encryptContent = async (content: string, password: string): Promise<{
+    encrypted: string;
+    salt: string;
+    iv: string;
+  }> => {
+    const encoder = new TextEncoder()
+    const salt = crypto.getRandomValues(new Uint8Array(16))
+    const iv = crypto.getRandomValues(new Uint8Array(12))
+
+    const keyMaterial = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(password),
+      { name: 'PBKDF2' },
+      false,
+      ['deriveKey']
+    )
+
+    const key = await crypto.subtle.deriveKey(
+      {
+        name: 'PBKDF2',
+        salt,
+        iterations: 100000,
+        hash: 'SHA-256',
+      },
+      keyMaterial,
+      { name: 'AES-GCM', length: 256 },
+      true,
+      ['encrypt']
+    )
+
+    const encryptedData = await crypto.subtle.encrypt(
+      { name: 'AES-GCM', iv },
+      key,
+      encoder.encode(content)
+    )
+
+    const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
+      return btoa(String.fromCharCode(...new Uint8Array(buffer)))
+    }
+
+    return {
+      encrypted: arrayBufferToBase64(encryptedData),
+      salt: arrayBufferToBase64(salt.buffer),
+      iv: arrayBufferToBase64(iv.buffer),
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError('')
 
+    let encryptedContent = content
+    let salt = null
+    let iv = null
+
     try {
+
+      if (encryption === 'client' && password) {
+        const { encrypted, salt: s, iv: i } = await encryptContent(content, password)
+        encryptedContent = encrypted
+        salt = s
+        iv = i
+      }
+
       const keywordArray = keywords
         .split(',')
         .map(k => k.trim())
@@ -47,9 +114,11 @@ export default function PastePage() {
         },
         body: JSON.stringify({
           title: title || 'Untitled',
-          content,
+          content: encryptedContent,
           encryption,
           password: encryption === 'server' ? password : undefined,
+          salt,
+          iv,
           syntax: syntax || undefined,
           keywords: keywordArray.length > 0 ? keywordArray : undefined,
         }),
@@ -90,6 +159,14 @@ export default function PastePage() {
     setPasteId('')
     setError('')
   }
+
+  // Fetch recent pastes on component mount
+  useEffect(() => {
+    fetch('/api/paste/recent')
+      .then(res => res.json())
+      .then(data => setRecentPastes(data.pastes))
+      .catch(() => setError('Failed to load recent pastes'))
+  }, [])
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 py-12">
@@ -180,6 +257,7 @@ export default function PastePage() {
                 </label>
 
                 <div className="space-y-3">
+
                   <label className="flex items-center gap-3">
                     <input
                       type="radio"
@@ -206,9 +284,25 @@ export default function PastePage() {
                       Server-side encryption (password required)
                     </span>
                   </label>
+
+                  <label className="flex items-center gap-3">
+                    <input
+                      type="radio"
+                      name="encryption"
+                      value="client"
+                      checked={encryption === 'client'}
+                      onChange={(e) => setEncryption(e.target.value as 'client')}
+                      className="text-green-600"
+                    />
+                    <span className="flex items-center gap-2">
+                      <LockIcon className="w-4 h-4" />
+                      Client-side encryption (password required)
+                    </span>
+                  </label>
+
                 </div>
 
-                {encryption === 'server' && (
+                { (encryption === 'server' || encryption === 'client') && (
                   <div className="relative">
                     <input
                       type={showPassword ? 'text' : 'password'}
@@ -297,6 +391,30 @@ export default function PastePage() {
             >
               Create Another Paste
             </button>
+          </div>
+        )}
+
+        {/* Recent */}
+        {recentPastes.length > 0 && (
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold mb-4">Recent Pastes</h3>
+            <ul className="space-y-2">
+              {recentPastes.map((paste, index) => (
+                <li key={index} className="bg-white p-3 rounded-lg shadow-sm border">
+                  <div className="flex items-center justify-between">
+                    <Link 
+                      href={`/paste/${paste.id}`} 
+                      className="text-blue-600 hover:underline truncate"
+                    >
+                      {paste.title || 'Untitled'}
+                    </Link>
+                    <span className="text-sm text-gray-500">
+                      {new Date(paste.timestamp).toLocaleDateString()}
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
 

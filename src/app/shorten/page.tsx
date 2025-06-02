@@ -1,7 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { LinkIcon, CopyIcon, CheckIcon, ExternalLinkIcon } from 'lucide-react'
+
+interface UrlEntry {
+  shortCode: string
+  url: string
+  timestamp: Date
+}
 
 export default function ShortenPage() {
   const [url, setUrl] = useState('')
@@ -9,6 +15,7 @@ export default function ShortenPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState('')
+  const [recentUrls, setRecentUrls] = useState<UrlEntry[]>([])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -53,6 +60,14 @@ export default function ShortenPage() {
     const shortUrl = `${window.location.origin}/api/redirect/${shortCode}`
     window.open(shortUrl, '_blank')
   }
+
+  // Fetch recent URLs on component mount
+  useEffect(() => {
+    fetch('/api/shorten/recent')
+      .then(res => res.json())
+      .then(data => setRecentUrls(data.urls))
+      .catch(() => setError('Failed to load recent URLs'))
+  }, [])
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
@@ -133,6 +148,39 @@ export default function ShortenPage() {
             </div>
           )}
         </div>
+
+        { /* recent */ }
+        {recentUrls.length > 0 && (
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold mb-4">Recent Shortened URLs</h3>
+            <ul className="space-y-2">
+              {recentUrls.map((urlEntry, index) => (
+                <li key={index} className="bg-white p-3 rounded-lg shadow-sm border">
+                  <div className="flex items-center justify-between">
+                    <a 
+                      href={`/api/redirect/${urlEntry.shortCode}`} 
+                      className="text-blue-600 hover:underline truncate"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {`${window.location.origin}/api/redirect/${urlEntry.shortCode}`}
+                    </a>
+                    <button 
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/api/redirect/${urlEntry.shortCode}`)
+                        setCopied(true)
+                        setTimeout(() => setCopied(false), 2000)
+                      }}
+                      className="ml-2 text-green-600 hover:text-green-800"
+                    >
+                      {copied ? <CheckIcon size={16} /> : <CopyIcon size={16} />}
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {/* Features */}
         <div className="mt-12 grid md:grid-cols-3 gap-6">

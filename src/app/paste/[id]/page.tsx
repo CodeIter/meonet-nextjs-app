@@ -10,6 +10,8 @@ interface PasteData {
   title: string
   content: string
   encryption: 'none' | 'client' | 'server'
+  salt: string | null
+  iv: string | null
   timestamp: string
   syntax?: string
   keywords?: string[]
@@ -60,17 +62,57 @@ export default function PasteViewPage() {
     setError('')
 
     try {
-      // In a real implementation, you'd send the password to the server
-      // to decrypt the content. For now, we'll simulate the process.
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      const encoder = new TextEncoder()
+      const decoder = new TextDecoder()
 
-      // This is a placeholder - actual decryption would happen server-side
+      const salt = base64ToArrayBuffer(paste.salt!)
+      const iv = base64ToArrayBuffer(paste.iv!)
+
+      const keyMaterial = await crypto.subtle.importKey(
+        'raw',
+        encoder.encode(password),
+        { name: 'PBKDF2' },
+        false,
+        ['deriveKey']
+      )
+
+      const key = await crypto.subtle.deriveKey(
+        {
+          name: 'PBKDF2',
+          salt,
+          iterations: 100000,
+          hash: 'SHA-256',
+        },
+        keyMaterial,
+        { name: 'AES-GCM', length: 256 },
+        true,
+        ['decrypt']
+      )
+
+      const decryptedData = await crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv },
+        key,
+        base64ToArrayBuffer(paste.content)
+      )
+
+      setPaste({ ...paste, content: decoder.decode(decryptedData) })
       setNeedsPassword(false)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to decrypt paste. Please check your password.')
     } finally {
       setIsDecrypting(false)
     }
+
+  }
+
+  const base64ToArrayBuffer = (base64: string): ArrayBuffer => {
+    const binaryString = atob(base64)
+    const len = binaryString.length
+    const bytes = new Uint8Array(len)
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i)
+    }
+    return bytes.buffer
   }
 
   const copyToClipboard = async () => {
