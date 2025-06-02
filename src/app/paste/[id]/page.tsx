@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { FileTextIcon, LockIcon, CopyIcon, CheckIcon, EyeIcon, EyeOffIcon, CalendarIcon } from 'lucide-react'
+import Link from 'next/link'
 
 interface PasteData {
   id: string
@@ -27,11 +28,7 @@ export default function PasteViewPage() {
   const [error, setError] = useState('')
   const [needsPassword, setNeedsPassword] = useState(false)
 
-  useEffect(() => {
-    fetchPaste()
-  }, [id])
-
-  const fetchPaste = async () => {
+  const fetchPaste = useCallback(async () => {
     try {
       const response = await fetch(`/api/paste/${id}`)
       const data = await response.json()
@@ -50,7 +47,11 @@ export default function PasteViewPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [id])
+
+  useEffect(() => {
+    fetchPaste()
+  }, [fetchPaste])
 
   const decryptContent = async () => {
     if (!paste || !password) return
@@ -66,7 +67,7 @@ export default function PasteViewPage() {
       // This is a placeholder - actual decryption would happen server-side
       setNeedsPassword(false)
     } catch (err) {
-      setError('Failed to decrypt paste. Please check your password.')
+      setError(err instanceof Error ? err.message : 'Failed to decrypt paste. Please check your password.')
     } finally {
       setIsDecrypting(false)
     }
@@ -111,9 +112,7 @@ export default function PasteViewPage() {
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Paste Not Found</h1>
             <p className="text-gray-600 mb-6">{error}</p>
-            <a href="/paste" className="btn-primary">
-              Create New Paste
-            </a>
+            <Link href="/paste" className="btn-primary">Create New Paste</Link>
           </div>
         </div>
       </main>
@@ -240,9 +239,7 @@ export default function PasteViewPage() {
 
         {/* Actions */}
         <div className="mt-6 text-center">
-          <a href="/paste" className="btn-primary">
-            Create New Paste
-          </a>
+          <Link href="/paste" className="btn-primary">Create New Paste</Link>
         </div>
       </div>
     </main>

@@ -13,7 +13,6 @@ const authorEmail = authorMatch ? authorMatch[2].trim() : 'Unknown'
 const repoUrl = packageJson.repository?.url || ''
 const usernameMatch = repoUrl.match(/(?:git@|https?:\/\/(?:www\.)?\w+\.\w+\/)([^/]+)\/([^/]+)/i)
 const gitUsername = usernameMatch ? usernameMatch[1] : 'Unknown'
-const repoName = usernameMatch ? usernameMatch[2].replace(/\.git$/, '') : 'repo'
 
 export const metadata: Metadata = {
   title: 'Web App - URL Shortener & Secure Pastebin',
