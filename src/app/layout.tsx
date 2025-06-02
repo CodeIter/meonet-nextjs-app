@@ -6,7 +6,6 @@ import packageJson from '#/package.json'
 
 // Get author name, username and email
 const authorName = packageJson.author.name || 'Anonymous'
-const authorEmail = packageJson.author.email || 'Unknown'
 const gitUsername = packageJson.author.username || 'Anonymous'
 const authorUrl = packageJson.author.url || packageJson.homepage
 
