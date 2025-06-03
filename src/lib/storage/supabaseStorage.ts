@@ -86,7 +86,7 @@ export class SupabaseStorage implements StorageService {
       iv: data.iv,
       cipher_algorithm: data.cipher_algorithm,
       timestamp: new Date(data.created_at),
-      syntax: data.syntax,
+      syntax: data.syntax === null ? undefined : data.syntax,
       keywords: (data.keywords as string[]) || []
     }
   }
