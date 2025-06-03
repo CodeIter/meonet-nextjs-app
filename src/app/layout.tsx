@@ -5,6 +5,7 @@ import './globals.css'
 
 import Navigation from '@/components/Navigation'
 import ClientIP from '@/components/ClientIP'
+import StorageWarning from '@/components/StorageWarning'
 
 import packageJson from '#/package.json'
 
@@ -61,6 +62,7 @@ export default function RootLayout({
       <body className="bg-gray-50 min-h-screen flex flex-col antialiased">
         <Navigation />
         <div className="flex-1">
+          <StorageWarning />
           {children}
         </div>
         <Footer />

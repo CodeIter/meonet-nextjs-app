@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server"
 import { v4 as uuidv4 } from "uuid"
 import bcrypt from "bcryptjs"
-import { pasteStore } from "@/lib/stores"
 import crypto from "crypto"
+
+import { storage } from '@/lib/storage'
 
 function generateSalt(length: number = 16): string {
   return crypto.randomBytes(Math.ceil(length / 2))
     .toString('hex')
-    .slice(0, length);
+    .slice(0, length)
 }
 
 export async function POST(request: NextRequest) {
@@ -56,7 +57,7 @@ export async function POST(request: NextRequest) {
   // For client-side encryption, we store encrypted content directly
   // and don't store password or IV
 
-  pasteStore.set(id, {
+  await storage.savePaste({
     id,
     title: title || "Untitled",
     content: encryptedContent,
