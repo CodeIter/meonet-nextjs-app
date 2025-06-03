@@ -6,16 +6,16 @@ import { StorageService, PasteEntry } from './types'
 // Supabase
 type PasteData = {
   id: string
+  created_at: string // ISO 8601 date string
   title: string
   content: string
   encryption: 'none' | 'client' | 'server'
-  password_hash: string | null
-  salt: string | null
-  iv: string | null
-  cipher_algorithm: string | null
-  created_at: string // ISO 8601 date string
-  syntax: string | null
-  keywords: string[] | null
+  password_hash?: string
+  salt?: string
+  iv?: string
+  cipher_algorithm?: string
+  syntax?: string
+  keywords?: string[]
 }
 
 export class SupabaseStorage implements StorageService {
@@ -78,6 +78,7 @@ export class SupabaseStorage implements StorageService {
   private mapPaste(data: PasteData): PasteEntry {
     return {
       id: data.id,
+      timestamp: new Date(data.created_at),
       title: data.title,
       content: data.content,
       encryption: data.encryption,
@@ -85,8 +86,7 @@ export class SupabaseStorage implements StorageService {
       salt: data.salt,
       iv: data.iv,
       cipher_algorithm: data.cipher_algorithm,
-      timestamp: new Date(data.created_at),
-      syntax: data.syntax === null ? undefined : data.syntax,
+      syntax: data.syntax,
       keywords: (data.keywords as string[]) || []
     }
   }

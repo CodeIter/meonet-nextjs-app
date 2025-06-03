@@ -33,10 +33,10 @@ export async function POST(request: NextRequest) {
   const id = uuidv4()
   const timestamp = new Date()
   let encryptedContent = content
-  let passwordHash = null
+  let passwordHash = undefined
   let salt = _salt
   let iv = _iv
-  let cipher_algorithm = null
+  let cipher_algorithm = undefined
 
   if (encryption === "server" && password) {
     // Generate salt and hash password
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     encryption,
     passwordHash,
     salt,
-    iv: iv ? iv.toString("base64") : null,
+    iv: iv ? iv.toString("base64") : undefined,
     cipher_algorithm,
     timestamp,
     syntax: syntax || "text",

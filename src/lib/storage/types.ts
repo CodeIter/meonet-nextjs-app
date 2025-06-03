@@ -1,14 +1,14 @@
 
 export interface PasteEntry {
   id: string
+  timestamp: Date
   title: string
   content: string
   encryption: 'none' | 'client' | 'server'
-  passwordHash: string | null
-  salt: string | null
-  iv: string | null
-  cipher_algorithm: string | null
-  timestamp: Date
+  passwordHash?: string
+  salt?: string
+  iv?: string
+  cipher_algorithm?: string
   syntax?: string
   keywords?: string[]
 }
