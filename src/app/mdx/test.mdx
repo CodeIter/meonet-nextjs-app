@@ -1,0 +1,51 @@
+import Link from 'next/link'
+import Image from 'next/image'
+import  DynamicTime from'@/components/DynamicTime'
+
+export const pi = 3.14
+
+{/* A comment! */}
+
+# Welcome to my MDX page!
+
+<DynamicTime />
+
+Two 🍰 is: {Math.PI * 2}
+
+{(function () {
+  const guess = Math.random()
+
+  if (guess > 0.66) {
+    return <span style={{color: 'tomato'}}>Look at us.</span>
+  }
+
+  if (guess > 0.33) {
+    return <span style={{color: 'violet'}}>Who would have guessed?!</span>
+  }
+
+  return <span style={{color: 'goldenrod'}}>Not me.</span>
+})()}
+
+This is some **bold** and _italics_ text.
+
+This is a list in markdown:
+
+- One
+- Two
+- Three
+
+Checkout a built-in Next.js Link component:
+
+<Link href="/about">
+  Visit the About Page
+</Link>
+
+Here's a placeholder image rendered as a JSX component:
+
+<Image
+  src="https://via.placeholder.com/150"
+  alt="Placeholder Image"
+  width={150}
+  height={150}
+/>
+
