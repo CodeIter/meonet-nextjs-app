@@ -1,10 +1,9 @@
 import { NextRequest } from 'next/server'
 
+import { getClientIp } from "@/lib/utils"
+
 export async function GET(request: NextRequest) {
   // Get IP address from headers
-  const ip = request.headers.get("x-forwarded-for") ||
-             request.headers.get("x-real-ip") ||
-             request.headers.get("cf-connecting-ip") ||
-             "unknown"
+  const ip = getClientIp(request)
   return Response.json({ ip })
 }
