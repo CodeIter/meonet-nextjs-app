@@ -23,11 +23,15 @@ export const RATE_LIMIT_MAX_REQUESTS: number =
 export const RATE_LIMIT_WINDOW_SIZE: number =
              parseInt(process.env.RATE_LIMIT_WINDOW_SIZE || '60') || 60
 
+// Cleanup interval (every 5 minutes)
+export const RATE_LIMIT_CLEANUP_INTERVAL: number = 5 * 60 * 1000
+
 export const config = {
 
   RATE_LIMIT: {
     MAX_REQUESTS: RATE_LIMIT_MAX_REQUESTS,
     WINDOW_SIZE: RATE_LIMIT_WINDOW_SIZE,
+    CLEANUP_INTERVAL: RATE_LIMIT_CLEANUP_INTERVAL
   },
 
   // Base URL for the application (will be overridden in production)
@@ -36,3 +40,4 @@ export const config = {
 }
 
 export default config
+

@@ -1,70 +1,60 @@
+// src/middleware.ts
 
-import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { config as rateLimitConfig } from "@/lib/config"
-import { getClientIp } from "@/lib/utils"
+import { NextResponse } from "next/server"
 
-// In-memory store for rate limiting
-const rateLimit = new Map<string, { count: number; resetTime: number }>()
+import rateLimitMiddleware from '@/middlewares/ratelimit'
+import httpHeaderMiddleware from '@/middlewares/http-header'
 
-export function middleware(request: NextRequest) {
-  // Only apply rate limiting to API routes
-  if (!request.nextUrl.pathname.startsWith("/api/")) {
-    return NextResponse.next()
+const middlewares = [
+  httpHeaderMiddleware,
+  rateLimitMiddleware
+]
+
+// Helper function to check if path matches any pattern
+function matchesPath(pathname: string, patterns: (string | RegExp)[]): boolean {
+  return patterns.some(pattern => {
+    if (typeof pattern === 'string') {
+      // Simple string path matching
+      return pathname === pattern || pathname.startsWith(pattern + '/')
+    } else if (pattern instanceof RegExp) {
+      // Regex pattern matching
+      return pattern.test(pathname)
+    }
+    return false
+  })
+}
+
+export default async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+  for (const middleware of middlewares) {
+    if (typeof middleware?.handler !== 'function') {
+      throw new TypeError(
+        `middleware.handler must be a function, got ${typeof middleware?.handler}`
+      )
+    }
+    // Check if middleware should run for this path
+    if (middleware.matcher && middleware.matcher.length > 0) {
+      const shouldRun = matchesPath(pathname, middleware.matcher)
+      if (!shouldRun) continue
+    }
+    const response = await middleware.handler(request)
+    if (response && response !== NextResponse.next()) {
+      return response
+    }
   }
-
-  // Get the IP address using our utility function
-  const ip = getClientIp(request)
-  const now = Date.now()
-
-  // Check if this IP is in our rate limit map
-  if (!rateLimit.has(ip)) {
-    // First request from this IP
-    rateLimit.set(ip, {
-      count: 1,
-      resetTime: now + rateLimitConfig.RATE_LIMIT.WINDOW_SIZE * 1000,
-    })
-    return NextResponse.next()
-  }
-
-  // Get the rate limit data for this IP
-  const rateLimitData = rateLimit.get(ip)!
-
-  // Check if the window has expired
-  if (now > rateLimitData.resetTime) {
-    // Reset the counter
-    rateLimit.set(ip, {
-      count: 1,
-      resetTime: now + rateLimitConfig.RATE_LIMIT.WINDOW_SIZE * 1000,
-    })
-    return NextResponse.next()
-  }
-
-  // Check if the IP has exceeded the rate limit
-  if (rateLimitData.count >= rateLimitConfig.RATE_LIMIT.MAX_REQUESTS) {
-    // Return a 429 Too Many Requests response
-    return new NextResponse(JSON.stringify({ error: "Too many requests, please try again later" }), {
-      status: 429,
-      headers: {
-        "Content-Type": "application/json",
-        "Retry-After": String(Math.ceil((rateLimitData.resetTime - now) / 1000)),
-      },
-    })
-  }
-
-  // Increment the counter
-  rateLimitData.count += 1
-  rateLimit.set(ip, rateLimitData)
-
   return NextResponse.next()
 }
 
-// Only run the middleware on API routes
+// This is Next.js-specific middleware configuration.
 export const config = {
+
   matcher: [
 
-    // Match all routes by default
+    // Match all routes
+    "/:path*"
 
-  ],
+  ]
+
 }
 
