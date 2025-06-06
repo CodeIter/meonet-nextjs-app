@@ -11,9 +11,11 @@ export const PROTO: string = VERCEL_URL
                              : (process.env.PROTO || 'http')
 //const PROTO: string = process.env.PROTO || 'http'
 
-export const BASE_URL: string = VERCEL_URL
-                          ? `${PROTO}://${VERCEL_URL}`
-                          : `${PROTO}://${HOST}:${PORT}`
+// Base URL for the application
+export const BASE_URL: string = process.env.BASE_URL
+  || (
+    VERCEL_URL ? `${PROTO}://${VERCEL_URL}` : `${PROTO}://${HOST}:${PORT}`
+  )
 
 // Rate limiting configuration
 // Number of requests allowed in the window
@@ -22,11 +24,22 @@ export const RATE_LIMIT_MAX_REQUESTS: number =
 // Time window in seconds
 export const RATE_LIMIT_WINDOW_SIZE: number =
              parseInt(process.env.RATE_LIMIT_WINDOW_SIZE || '60') || 60
-
 // Cleanup interval (every 5 minutes)
 export const RATE_LIMIT_CLEANUP_INTERVAL: number = 5 * 60 * 1000
 
+// Supabase configuration
+// Supabase URL
+export const PUBLIC_SUPABASE_URL: string | undefined =
+  process.env.PUBLIC_SUPABASE_URL
+// Supabase Anon Key
+export const PUBLIC_SUPABASE_ANON_KEY: string | undefined =
+  process.env.PUBLIC_SUPABASE_ANON_KEY
+
 export const config = {
+
+  HOST, PORT, PROTO,
+
+  BASE_URL,
 
   RATE_LIMIT: {
     MAX_REQUESTS: RATE_LIMIT_MAX_REQUESTS,
@@ -34,8 +47,8 @@ export const config = {
     CLEANUP_INTERVAL: RATE_LIMIT_CLEANUP_INTERVAL
   },
 
-  // Base URL for the application (will be overridden in production)
-  BASE_URL,
+  PUBLIC_SUPABASE_URL,
+  PUBLIC_SUPABASE_ANON_KEY
 
 }
 
