@@ -1,0 +1,33 @@
+
+import {
+  type NextRequest,
+} from "next/server"
+
+import {
+  type NextMiddleware,
+  type NemoEvent
+} from '@rescale/nemo'
+
+import { getClientIp } from "@/lib/utils"
+
+export const middleware: NextMiddleware = async (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  request: NextRequest, event: NemoEvent
+) => {
+
+  const startTime = Date.now()
+
+  const nowDate = new Date(startTime).toISOString()
+
+  event.storage.set<number>("startTime", startTime)
+
+  const ip = getClientIp(request)
+
+  const { method, url } = request
+
+  console.log(`[${nowDate}] ${ip} ${method} ${url}`)
+
+}
+
+export default middleware
+

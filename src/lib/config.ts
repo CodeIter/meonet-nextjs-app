@@ -24,8 +24,6 @@ export const RATE_LIMIT_MAX_REQUESTS: number =
 // Time window in seconds
 export const RATE_LIMIT_WINDOW_SIZE: number =
              parseInt(process.env.RATE_LIMIT_WINDOW_SIZE || '60') || 60
-// Cleanup interval (every 5 minutes)
-export const RATE_LIMIT_CLEANUP_INTERVAL: number = 5 * 60 * 1000
 
 // Supabase configuration
 // Supabase URL
@@ -43,8 +41,7 @@ export const config = {
 
   RATE_LIMIT: {
     MAX_REQUESTS: RATE_LIMIT_MAX_REQUESTS,
-    WINDOW_SIZE: RATE_LIMIT_WINDOW_SIZE,
-    CLEANUP_INTERVAL: RATE_LIMIT_CLEANUP_INTERVAL
+    WINDOW_SIZE: RATE_LIMIT_WINDOW_SIZE
   },
 
   PUBLIC_SUPABASE_URL,
