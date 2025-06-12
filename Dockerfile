@@ -58,7 +58,8 @@ ENV PATH="$PNPM_HOME:$PATH"
 
 # Enable corepack and install configured package manager from package.json
 RUN corepack enable && \
-    corepack prepare --activate
+    corepack prepare --activate && \
+    mkdir -p /app/public # Ensure existence of public directory
 
 # Build project
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
