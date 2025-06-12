@@ -19,6 +19,9 @@ const nextConfig: NextConfig = {
   // Configure `pageExtensions` to include markdown and MDX files
   pageExtensions: [ 'js', 'jsx', 'mjs', 'ts', 'tsx', 'md', 'mdx' ],
 
+  // Enable standalone output mode
+  output: 'standalone',
+
   // Optionally, add any other Next.js config below
   experimental: {}
 
