@@ -59,7 +59,7 @@ export default function PWAInstallButton() {
       // Hide the install button
       setShowButton(false)
 
-      console.log(`User chose ${outcome} on ${window.deferredPrompt.platforms.join(', ')}`)
+      console.log(`User chose ${outcome} on ${window.deferredPrompt?.platforms?.join(', ') ?? 'unknown platform'}`)
     } catch (error) {
       console.error('Installation prompt failed:', error)
     }
