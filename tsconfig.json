@@ -20,11 +20,15 @@
     "incremental": true,
 
     "lib": [
-      "dom", "dom.iterable", "esnext"
+      "dom", "dom.iterable", "esnext",
+      // Adds WebWorker and ServiceWorker types to the global.
+      "webworker"
     ],
 
     "types": [
-      "mdx"
+      "mdx",
+      // This allows Serwist to type `window.serwist`.
+      "@serwist/next/typings"
     ],
 
     "plugins": [
@@ -48,7 +52,7 @@
   ],
 
   "exclude": [
-    "node_modules"
+    "node_modules", "public/sw.js"
   ]
 
 }
