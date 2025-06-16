@@ -14,6 +14,10 @@ files-data.txt
 .DS_Store
 *.pem
 
+# Serwist
+public/sw*
+public/swe-worker*
+
 # Created by https://www.toptal.com/developers/gitignore/api/node,nextjs,yarn
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,nextjs,yarn
 
