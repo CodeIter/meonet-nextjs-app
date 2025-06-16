@@ -17,14 +17,6 @@ export const BASE_URL: string = process.env.BASE_URL
     VERCEL_URL ? `${PROTO}://${VERCEL_URL}` : `${PROTO}://${HOST}:${PORT}`
   )
 
-// Rate limiting configuration
-// Number of requests allowed in the window
-export const RATE_LIMIT_MAX_REQUESTS: number =
-             parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '50') || 50
-// Time window in seconds
-export const RATE_LIMIT_WINDOW_SIZE: number =
-             parseInt(process.env.RATE_LIMIT_WINDOW_SIZE || '60') || 60
-
 // Supabase configuration
 // Supabase URL
 export const PUBLIC_SUPABASE_URL: string | undefined =
@@ -38,11 +30,6 @@ export const config = {
   HOST, PORT, PROTO,
 
   BASE_URL,
-
-  RATE_LIMIT: {
-    MAX_REQUESTS: RATE_LIMIT_MAX_REQUESTS,
-    WINDOW_SIZE: RATE_LIMIT_WINDOW_SIZE
-  },
 
   PUBLIC_SUPABASE_URL,
   PUBLIC_SUPABASE_ANON_KEY
