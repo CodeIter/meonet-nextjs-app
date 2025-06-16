@@ -53,16 +53,23 @@ export default function PWAInstallButton() {
       // Wait for the user to respond to the prompt
       const { outcome } = await window.deferredPrompt.userChoice
 
+      if (window.deferredPrompt) {
+        const promptEvent = window.deferredPrompt as BeforeInstallPromptEvent
+        console.log(`User chose ${outcome} on ${promptEvent.platforms.join(', ')}`)
+      } else {
+        console.log(`User chose ${outcome} on unknown platform`)
+      }
+
       // Reset the deferred prompt variable
       window.deferredPrompt = undefined
 
       // Hide the install button
       setShowButton(false)
 
-      console.log(`User chose ${outcome} on ${window.deferredPrompt?.platforms?.join(', ') ?? 'unknown platform'}`)
     } catch (error) {
       console.error('Installation prompt failed:', error)
     }
+
   }
 
   if (!showButton) return null
