@@ -1,7 +1,6 @@
 
 'use client'
 
-import { redirect } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { FileTextIcon, LockIcon, CopyIcon, CheckIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
 import Link from 'next/link'
@@ -16,6 +15,19 @@ export default function PastePage() {
 
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null)
 
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+  const [syntax, setSyntax] = useState('')
+  const [encryption, setEncryption] = useState<'none' | 'server' | 'client'>('none')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [keywords, setKeywords] = useState('')
+  const [pasteId, setPasteId] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const [error, setError] = useState('')
+  const [recentPastes, setRecentPastes] = useState<RecentPaste[]>([])
+
   useEffect(() => {
     const checkStorage = async () => {
       try {
@@ -28,6 +40,14 @@ export default function PastePage() {
       }
     }
     checkStorage()
+  }, [])
+
+  // Fetch recent pastes on component mount
+  useEffect(() => {
+    fetch('/api/paste/recent')
+      .then(res => res.json())
+      .then(data => setRecentPastes(data.pastes))
+      .catch(() => setError('Failed to load recent pastes'))
   }, [])
 
   if (isAvailable === null) {
@@ -46,19 +66,6 @@ export default function PastePage() {
       </div>
     )
   }
-
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [syntax, setSyntax] = useState('')
-  const [encryption, setEncryption] = useState<'none' | 'server' | 'client'>('none')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [keywords, setKeywords] = useState('')
-  const [pasteId, setPasteId] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [copied, setCopied] = useState(false)
-  const [error, setError] = useState('')
-  const [recentPastes, setRecentPastes] = useState<RecentPaste[]>([])
 
   const syntaxOptions = [
     { value: '', label: 'Plain Text' },
@@ -195,14 +202,6 @@ const encryptContent = async (content: string, password: string): Promise<{
     setPasteId('')
     setError('')
   }
-
-  // Fetch recent pastes on component mount
-  useEffect(() => {
-    fetch('/api/paste/recent')
-      .then(res => res.json())
-      .then(data => setRecentPastes(data.pastes))
-      .catch(() => setError('Failed to load recent pastes'))
-  }, [])
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 py-12">

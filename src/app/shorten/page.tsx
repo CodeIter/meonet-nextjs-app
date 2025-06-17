@@ -1,7 +1,6 @@
 
 'use client'
 
-import { redirect } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { LinkIcon, CopyIcon, CheckIcon, ExternalLinkIcon } from 'lucide-react'
 
@@ -15,6 +14,13 @@ export default function ShortenPage() {
 
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null)
 
+  const [url, setUrl] = useState('')
+  const [shortCode, setShortCode] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const [error, setError] = useState('')
+  const [recentUrls, setRecentUrls] = useState<UrlEntry[]>([])
+
   useEffect(() => {
     const checkStorage = async () => {
       try {
@@ -27,6 +33,14 @@ export default function ShortenPage() {
       }
     }
     checkStorage()
+  }, [])
+
+  // Fetch recent URLs on component mount
+  useEffect(() => {
+    fetch('/api/shorten/recent')
+      .then(res => res.json())
+      .then(data => setRecentUrls(data.urls))
+      .catch(() => setError('Failed to load recent URLs'))
   }, [])
 
   if (isAvailable === null) {
@@ -45,13 +59,6 @@ export default function ShortenPage() {
       </div>
     )
   }
-
-  const [url, setUrl] = useState('')
-  const [shortCode, setShortCode] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [copied, setCopied] = useState(false)
-  const [error, setError] = useState('')
-  const [recentUrls, setRecentUrls] = useState<UrlEntry[]>([])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -96,14 +103,6 @@ export default function ShortenPage() {
     const shortUrl = `${window.location.origin}/api/redirect/${shortCode}`
     window.open(shortUrl, '_blank')
   }
-
-  // Fetch recent URLs on component mount
-  useEffect(() => {
-    fetch('/api/shorten/recent')
-      .then(res => res.json())
-      .then(data => setRecentUrls(data.urls))
-      .catch(() => setError('Failed to load recent URLs'))
-  }, [])
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
