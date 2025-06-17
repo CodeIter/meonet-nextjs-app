@@ -1,6 +1,6 @@
 
-import { supabase } from '@/lib/supabaseClient'
-import { StorageService, PasteEntry } from './types'
+import { supabase } from '@/lib/storage/supabaseClient'
+import { StorageService, PasteEntry } from '@/lib/storage/types'
 
 // Define the expected shape of the data returned from
 // Supabase
