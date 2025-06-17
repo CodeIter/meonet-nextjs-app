@@ -18,7 +18,7 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
 
-  const navItems: NavItem= [
+  const navItems: NavItem[] = [
     {
       href: '/',
       key:'home',
