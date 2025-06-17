@@ -36,7 +36,7 @@ export default function Navigation() {
       key:'paste',
       label: 'Secure Pastebin',
       icon: FileTextIcon
-    },
+    }
   ]
 
   const isActive = (href: string) => {
