@@ -1,3 +1,4 @@
+
 import { NextRequest, NextResponse } from "next/server"
 import { v4 as uuidv4 } from "uuid"
 import bcrypt from "bcryptjs"
@@ -12,6 +13,14 @@ function generateSalt(length: number = 16): string {
 }
 
 export async function POST(request: NextRequest) {
+
+  if (!storage) {
+    return NextResponse.json(
+      { error: "Storage is not available" },
+      { status: 503 } // Service Unavailable
+    )
+  }
+
   const {
     title,
     content,
