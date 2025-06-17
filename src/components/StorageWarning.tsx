@@ -7,8 +7,8 @@ export default function StorageWarning() {
     fetch('/api/storage')
       .then(res => res.json())
       .then(data => {
-        if (data.storageType === 'temp_fs') {
-          alert('⚠️ Warning: Using temporary storage. Data will be lost on restart.')
+        if (data.storageType === 'disabled') {
+          alert('⚠️ Warning: Database storage disabled.')
         }
       })
   }, [])

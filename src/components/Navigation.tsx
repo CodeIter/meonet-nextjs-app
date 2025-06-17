@@ -1,24 +1,57 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { HomeIcon, LinkIcon, FileTextIcon, MenuIcon, XIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+
+type NavItem = {
+  href: string
+  key: string
+  label: string
+  icon: LucideIcon
+}
 
 export default function Navigation() {
+  const [isStorageAvailable, setIsStorageAvailable] = useState(true)
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
 
-  const navItems = [
-    { href: '/', label: 'Home', icon: HomeIcon },
-    { href: '/shorten', label: 'URL Shortener', icon: LinkIcon },
-    { href: '/paste', label: 'Secure Pastebin', icon: FileTextIcon },
+  const navItems: NavItem= [
+    {
+      href: '/',
+      key:'home',
+      label: 'Home',
+      icon: HomeIcon
+    },
+    {
+      href: '/shorten',
+      key:'shorten',
+      label: 'URL Shortener',
+      icon: LinkIcon
+    },
+    {
+      href: '/paste',
+      key:'paste',
+      label: 'Secure Pastebin',
+      icon: FileTextIcon
+    },
   ]
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/'
     return pathname.startsWith(href)
   }
+
+  useEffect(() => {
+    fetch('/api/storage')
+      .then(res => res.json())
+      .then(data => {
+        setIsStorageAvailable(data.storageType !== 'disabled')
+      })
+      .catch(() => setIsStorageAvailable(false))
+  }, [])
 
   return (
     <nav className="bg-white shadow-sm border-b sticky top-0 z-50">
@@ -34,18 +67,24 @@ export default function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {navItems.map(({ href, label, icon: Icon }) => (
+            {navItems.map(({ href, key, label, icon: Icon }) => (
               <Link
-                key={href}
-                href={href}
+                key={key}
+                href={isStorageAvailable ? href : '#'}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
                   isActive(href)
                     ? 'bg-blue-50 text-blue-600 font-medium'
                     : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
-                }`}
+                }${isStorageAvailable ? '' : 'text-gray-400 cursor-not-allowed' }` }
+                aria-disabled={!isStorageAvailable}
               >
                 <Icon className="w-4 h-4" />
                 {label}
+                {!isStorageAvailable && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">
+                    Disabled
+                  </span>
+                )}
               </Link>
             ))}
           </div>
@@ -63,19 +102,25 @@ export default function Navigation() {
         {isOpen && (
           <div className="md:hidden py-4 border-t">
             <div className="space-y-2">
-              {navItems.map(({ href, label, icon: Icon }) => (
+              {navItems.map(({ href, key, label, icon: Icon }) => (
                 <Link
-                  key={href}
-                  href={href}
+                  key={key}
+                  href={isStorageAvailable ? href : '#'}
                   onClick={() => setIsOpen(false)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                     isActive(href)
                       ? 'bg-blue-50 text-blue-600 font-medium'
                       : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
-                  }`}
+                  }${isStorageAvailable ? '' : 'text-gray-400 cursor-not-allowed' }` }
+                aria-disabled={!isStorageAvailable}
                 >
                   <Icon className="w-5 h-5" />
                   {label}
+                  {!isStorageAvailable && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">
+                      Disabled
+                    </span>
+                  )}
                 </Link>
               ))}
             </div>

@@ -1,5 +1,7 @@
+
 'use client'
 
+import { redirect } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { FileTextIcon, LockIcon, CopyIcon, CheckIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
 import Link from 'next/link'
@@ -11,6 +13,40 @@ interface RecentPaste {
 }
 
 export default function PastePage() {
+
+  const [isAvailable, setIsAvailable] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    const checkStorage = async () => {
+      try {
+        const res = await fetch('/api/storage')
+        const data = await res.json()
+        setIsAvailable(data.storageType !== 'disabled')
+      } catch (error) {
+        console.error('Failed to fetch storage status:', error)
+        setIsAvailable(false)
+      }
+    }
+    checkStorage()
+  }, [])
+
+  if (isAvailable === null) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p>Checking service status...</p>
+      </div>
+    )
+  }
+
+  if (!isAvailable) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <h1 className="text-2xl text-red-600">Service Unavailable</h1>
+        <p>This feature requires database configuration.</p>
+      </div>
+    )
+  }
+
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [syntax, setSyntax] = useState('')
