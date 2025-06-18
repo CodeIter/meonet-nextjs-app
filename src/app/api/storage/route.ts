@@ -1,8 +1,11 @@
 
-import { storage } from '@/lib/storage'
-import { SupabaseStorage } from '@/lib/storage/supabaseStorage'
+import { supabase } from '@/lib/storage'
 
 export async function GET() {
-  const isSupabase = storage instanceof SupabaseStorage
-  return Response.json({ storageType: isSupabase ? 'database' : 'disabled' })
+
+  return Response.json({
+    storageType: supabase ? 'database' : 'disabled'
+  })
+
 }
+

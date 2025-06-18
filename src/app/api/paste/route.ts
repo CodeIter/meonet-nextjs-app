@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid"
 import bcrypt from "bcryptjs"
 import crypto from "crypto"
 
-import { storage } from '@/lib/storage'
+import { pastebinDB } from '@/lib/storage'
 
 function generateSalt(length: number = 16): string {
   return crypto.randomBytes(Math.ceil(length / 2))
@@ -14,7 +14,7 @@ function generateSalt(length: number = 16): string {
 
 export async function POST(request: NextRequest) {
 
-  if (!storage) {
+  if (!pastebinDB) {
     return NextResponse.json(
       { error: "Storage is not available" },
       { status: 503 } // Service Unavailable
@@ -65,20 +65,21 @@ export async function POST(request: NextRequest) {
 
   // For client-side encryption, we store encrypted content directly
   // and don't store password or IV
-
-  await storage.savePaste({
+  await pastebinDB.set(id, {
     id,
     title: title || "Untitled",
     content: encryptedContent,
     encryption,
-    passwordHash,
+    password_hash: passwordHash,
     salt,
     iv: iv ? iv.toString("base64") : undefined,
     cipher_algorithm,
-    timestamp,
+    created_at: timestamp.toISOString(),
     syntax: syntax || "text",
-    keywords: keywords || [],
+    keywords: keywords || []
   })
 
   return NextResponse.json({ id })
+
 }
+

@@ -1,10 +1,19 @@
+
 import { NextRequest, NextResponse } from "next/server"
 
 import { generateShortCode } from "@/lib/utils"
-import { urlStore } from "@/lib/stores"
 import { getClientIp } from "@/lib/utils"
+import { urlShortenerDB } from "@/lib/storage"
 
 export async function POST(request: NextRequest) {
+
+  if (!urlShortenerDB) {
+    return NextResponse.json(
+      { error: "Storage is not available" },
+      { status: 503 } // Service Unavailable
+    )
+  }
+
   const { url } = await request.json()
 
   // Get IP address from headers
@@ -24,11 +33,14 @@ export async function POST(request: NextRequest) {
   const timestamp = new Date()
 
   // Add to store (will auto-evict old entries if needed)
-  urlStore.set(shortCode, {
-    url,
+  await urlShortenerDB.set(shortCode, {
+    short_code: shortCode,
+    original_url: url,
     ip,
-    timestamp,
+    created_at: timestamp.toISOString()
   })
 
   return NextResponse.json({ shortCode })
+
 }
+
