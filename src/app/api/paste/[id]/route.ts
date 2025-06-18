@@ -1,7 +1,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 
-import { pastebinDB } from '@/lib/Storage'
+import { pastebinDB } from '@/lib/storage'
 
 interface ContextProps {
   params: Promise<{ id: string }>
