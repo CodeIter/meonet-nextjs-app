@@ -1,9 +1,14 @@
 
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY
+import {
+  PUBLIC_SUPABASE_URL,
+  PUBLIC_SUPABASE_ANON_KEY
+} from '@/lib/config'
 
-export const supabase = supabaseUrl && supabaseAnonKey
-  ? createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = PUBLIC_SUPABASE_URL && PUBLIC_SUPABASE_ANON_KEY
+  ? createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY)
   : null
+
+export default supabase
+
