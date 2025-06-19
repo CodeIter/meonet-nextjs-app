@@ -1,14 +1,31 @@
 
 import { NextResponse } from "next/server"
-import { urlStore } from "@/lib/stores"
+
+import { urlShortenerDB } from "@/lib/storage"
 
 export async function GET() {
+
+  if (!urlShortenerDB) {
+    return NextResponse.json(
+      { error: "Storage is not available" },
+      { status: 503 } // Service Unavailable
+    )
+  }
+
+  const result = await urlShortenerDB.list('*')
+
   // Convert Map to array and omit IP field
-  const urls = urlStore.getAll().map(([key, value]) => ({
-    shortCode: key,
-    url: value.url,
-    timestamp: value.timestamp
-  })).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()).slice(0, 10)
+  // Extract and format URLs
+  const urls = result.data
+    .map((item) => ({
+      shortCode: item.short_code,
+      url: item.original_url,
+      timestamp: new Date(item.created_at),
+    }))
+    .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+    .slice(0, 10)
 
   return NextResponse.json({ urls })
+
 }
+
