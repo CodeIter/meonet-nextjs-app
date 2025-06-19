@@ -10,7 +10,7 @@ export interface URLShortenerItem {
   created_at: string;
 }
 
-export class URLShortenerRepository extends SupabaseRepository<URLShortenerItem, string> {
+export class URLShortenerRepository extends SupabaseRepository<URLShortenerItem, 'short_code'> {
 
   constructor(supabase: SupabaseClient) {
     super(supabase, 'urlshortener', 'short_code');

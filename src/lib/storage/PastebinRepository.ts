@@ -17,7 +17,7 @@ export interface PastebinItem {
   keywords: string[] | null;
 }
 
-export class PastebinRepository extends SupabaseRepository<PastebinItem, string> {
+export class PastebinRepository extends SupabaseRepository<PastebinItem, 'id'> {
 
   constructor(supabase: SupabaseClient) {
     super(supabase, 'pastebin', 'id');

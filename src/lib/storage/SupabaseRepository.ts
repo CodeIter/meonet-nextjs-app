@@ -13,13 +13,13 @@ export class SupabaseRepository<T, K extends keyof T> {
   constructor(
     private readonly supabase: SupabaseClient,
     private readonly table: string,
-    private readonly primaryKey: string
+    private readonly primaryKey: K
   ) {}
 
   /**
    * Get a single item by primary key.
    */
-  async get(key: K, select: string = '*'): Promise<T | null> {
+  async get(key: T[K], select: string = '*'): Promise<T | null> {
     const { data, error } = await this.supabase
       .from<T>(this.table)
       .select(select)
@@ -27,13 +27,13 @@ export class SupabaseRepository<T, K extends keyof T> {
       .maybeSingle()
 
     if (error) throw error
-    return data
+    return data as T
   }
 
   /**
    * Upsert an item by primary key.
    */
-  async set(key: K, value: Partial<T>): Promise<void> {
+  async set(key: T[K], value: Partial<T>): Promise<void> {
     const payload = {
       ...value,
       [this.primaryKey]: key
@@ -49,7 +49,7 @@ export class SupabaseRepository<T, K extends keyof T> {
   /**
    * Delete an item by primary key.
    */
-  async delete(key: K): Promise<void> {
+  async delete(key: T[K]): Promise<void> {
     const { error } = await this.supabase
       .from(this.table)
       .delete()
