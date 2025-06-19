@@ -27,7 +27,7 @@ export async function GET(
     return NextResponse.json({ error: "Not found" }, { status: 404 })
   }
 
-  return NextResponse.redirect(entry.url)
+  return NextResponse.redirect(entry.original_url)
 
 }
 
