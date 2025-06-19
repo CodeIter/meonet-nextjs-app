@@ -28,7 +28,7 @@ export class PastebinRepository extends SupabaseRepository<PastebinItem, 'id'> {
    */
   async create(item: Omit<PastebinItem, 'id'>): Promise<PastebinItem> {
     const { data, error } = await this.supabase
-      .from<PastebinItem>('pastebin')
+      .from('pastebin')
       .insert(item)
       .select()
       .single();
@@ -41,7 +41,7 @@ export class PastebinRepository extends SupabaseRepository<PastebinItem, 'id'> {
    * Find pastes by syntax or keywords.
    */
   async findBySyntax(syntax: string): Promise<PastebinItem[]> {
-    return this.find('*', (q) => q.eq('syntax', syntax));
+    return this.find('*', { syntax })
   }
 
 }

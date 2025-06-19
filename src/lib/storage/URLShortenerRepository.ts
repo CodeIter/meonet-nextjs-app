@@ -21,7 +21,7 @@ export class URLShortenerRepository extends SupabaseRepository<URLShortenerItem,
    */
   async create(item: URLShortenerItem): Promise<void> {
     const { error } = await this.supabase
-      .from<URLShortenerItem>('urlshortener')
+      .from('urlshortener')
       .insert(item);
 
     if (error) throw error;
@@ -31,12 +31,7 @@ export class URLShortenerRepository extends SupabaseRepository<URLShortenerItem,
    * Find recent links by IP.
    */
   async findRecentByIP(ip: string): Promise<URLShortenerItem[]> {
-    const oneWeekAgo = new Date();
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-
-    return this.find('*', (q) =>
-      q.eq('ip', ip).gt('created_at', oneWeekAgo.toISOString())
-    );
+    return this.find('*', { ip } )
   }
 
 }
