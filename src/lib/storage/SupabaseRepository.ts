@@ -11,9 +11,9 @@ import {
 export class SupabaseRepository<T, K extends keyof T> {
 
   constructor(
-    private readonly supabase: SupabaseClient,
-    private readonly table: string,
-    private readonly primaryKey: K
+    protected readonly supabase: SupabaseClient,
+    protected readonly table: string,
+    protected readonly primaryKey: K
   ) {}
 
   /**
