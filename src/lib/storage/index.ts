@@ -5,13 +5,13 @@ import { URLShortenerRepository } from '@/lib/storage/URLShortenerRepository'
 
 export { supabase }
 
-export const pastebinDB = new PastebinRepository(supabase)
+export const pastebinDB = supabase ?
+  new PastebinRepository(supabase) : null
 
-export const urlShortenerDB = new URLShortenerRepository(supabase)
+export const urlShortenerDB = supabase ?
+  new URLShortenerRepository(supabase) : null
 
 if (!supabase) {
-  pastebinDB = null
-  urlShortenerDB = null
   console.warn('⚠️ Supabase not configured.')
 }
 
