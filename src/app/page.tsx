@@ -1,9 +1,12 @@
+
 import Link from 'next/link'
 import { LinkIcon, FileTextIcon, ShieldIcon, ZapIcon } from 'lucide-react'
 
 export default function HomePage() {
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
@@ -14,7 +17,6 @@ export default function HomePage() {
             Your all-in-one platform for URL shortening and secure text sharing.
             Fast, reliable, and built with modern web technologies.
           </p>
-
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/shorten"
@@ -45,7 +47,6 @@ export default function HomePage() {
               emails, and anywhere character count matters.
             </p>
           </div>
-
           <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
             <div className="bg-green-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
               <ShieldIcon className="w-6 h-6 text-green-600" />
@@ -56,7 +57,6 @@ export default function HomePage() {
               and client-side encryption for maximum privacy.
             </p>
           </div>
-
           <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
             <div className="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
               <ZapIcon className="w-6 h-6 text-purple-600" />
@@ -90,7 +90,10 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+
       </div>
+
     </main>
   )
 }
+
