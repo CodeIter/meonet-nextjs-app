@@ -89,7 +89,7 @@ export default function ShortenPage() {
   }
 
   const copyToClipboard = async () => {
-    const shortUrl = `${window.location.origin}/api/redirect/${shortCode}`
+    const shortUrl = `${window.location.origin}/r/${shortCode}`
     try {
       await navigator.clipboard.writeText(shortUrl)
       setCopied(true)
@@ -100,7 +100,7 @@ export default function ShortenPage() {
   }
 
   const openShortUrl = () => {
-    const shortUrl = `${window.location.origin}/api/redirect/${shortCode}`
+    const shortUrl = `${window.location.origin}/r/${shortCode}`
     window.open(shortUrl, '_blank')
   }
 
@@ -157,7 +157,7 @@ export default function ShortenPage() {
 
               <div className="flex items-center gap-2 p-3 bg-white border border-green-300 rounded-lg mb-4">
                 <code className="flex-1 text-green-700 font-mono text-sm">
-                  {`${window.location.origin}/api/redirect/${shortCode}`}
+                  {`${window.location.origin}/r/${shortCode}`}
                 </code>
                 <button
                   onClick={copyToClipboard}
@@ -193,16 +193,16 @@ export default function ShortenPage() {
                 <li key={index} className="bg-white p-3 rounded-lg shadow-sm border">
                   <div className="flex items-center justify-between">
                     <a 
-                      href={`/api/redirect/${urlEntry.shortCode}`} 
+                      href={`/r/${urlEntry.shortCode}`} 
                       className="text-blue-600 hover:underline truncate"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {`${window.location.origin}/api/redirect/${urlEntry.shortCode}`}
+                      {`${window.location.origin}/r/${urlEntry.shortCode}`}
                     </a>
                     <button 
                       onClick={() => {
-                        navigator.clipboard.writeText(`${window.location.origin}/api/redirect/${urlEntry.shortCode}`)
+                        navigator.clipboard.writeText(`${window.location.origin}/r/${urlEntry.shortCode}`)
                         setCopied(true)
                         setTimeout(() => setCopied(false), 2000)
                       }}
