@@ -33,8 +33,12 @@ export async function GET(
     const { password_hash, salt, iv, ...safePaste } = paste
     return NextResponse.json(safePaste)
 
-  } catch(error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  } catch (err: unknown) {
+    console.error(err)
+    if (err instanceof Error) {
+      return NextResponse.json({ error: err.message }, { status: 500 })
+    }
+    return NextResponse.json({ error: "Unknown error" }, { status: 500 })
   }
 
 }
