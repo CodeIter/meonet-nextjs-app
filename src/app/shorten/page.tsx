@@ -37,7 +37,7 @@ export default function ShortenPage() {
 
   // Fetch recent URLs on component mount
   useEffect(() => {
-    fetch('/api/shorten/recent')
+    fetch('/api/url/shorten/recent')
       .then(res => res.json())
       .then(data => setRecentUrls(data.urls))
       .catch(() => setError('Failed to load recent URLs'))
@@ -66,7 +66,7 @@ export default function ShortenPage() {
     setError('')
 
     try {
-      const response = await fetch('/api/shorten', {
+      const response = await fetch('/api/url/shorten', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
