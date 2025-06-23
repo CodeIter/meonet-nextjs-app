@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 
   try {
 
-    const result = await urlShortenerDB.list('*')
+    const result = await urlShortenerDB.findRecentByIP(ip)
 
     // Convert Map to array and omit IP field
     // Extract and format URLs
