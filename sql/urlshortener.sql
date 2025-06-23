@@ -6,7 +6,22 @@ CREATE TABLE IF NOT EXISTS urlshortener (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-ALTER TABLE urlshortener ENABLE ROW LEVEL SECURITY;
+-- Enable Row Level Security for the tables
+ALTER TABLE public.urlshortener ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Allow public insert" ON urlshortener FOR INSERT WITH CHECK (true);
+-- Create policies for the urlshortener table
+CREATE POLICY "Enable write access for all users"
+ON public.urlshortener
+FOR INSERT
+TO anon
+USING (true)
+WITH CHECK (true);
+
+CREATE POLICY "Enable read access for all users"
+ON public.urlshortener
+FOR SELECT
+TO anon
+USING (true);
+
+SELECT * FROM pg_policies WHERE tablename IN ('urlshortener');
 

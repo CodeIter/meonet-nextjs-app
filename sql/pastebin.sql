@@ -13,7 +13,22 @@ CREATE TABLE IF NOT EXISTS pastebin (
   keywords TEXT[]
 );
 
-ALTER TABLE pastebin ENABLE ROW LEVEL SECURITY;
+-- Enable Row Level Security for the tables
+ALTER TABLE public.pastebin ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Allow public insert" ON pastebin FOR INSERT WITH CHECK (true);
+-- Create policies for the pastebin table
+CREATE POLICY "Enable write access for all users"
+ON public.pastebin
+FOR INSERT
+TO anon
+USING (true)
+WITH CHECK (true);
+
+CREATE POLICY "Enable read access for all users"
+ON public.pastebin
+FOR SELECT
+TO anon
+USING (true);
+
+SELECT * FROM pg_policies WHERE tablename IN ('pastebin');
 
