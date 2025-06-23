@@ -35,6 +35,16 @@ export class URLShortenerRepository extends SupabaseRepository<URLShortenerItem,
     return this.find('*', { ip } )
   }
 
+  /**
+   * Increment hit count
+   */
+  async updateHitCount(shortCode: string, new_hit_count: number): Promise<void> {
+    await this.supabase
+      .from("urlshortener")
+      .update({ hit_count: new_hit_count })
+      .eq("short_code", shortCode)
+  }
+
 }
 
 export default URLShortenerRepository

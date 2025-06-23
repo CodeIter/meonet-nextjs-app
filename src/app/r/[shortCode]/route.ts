@@ -30,10 +30,9 @@ export async function GET(
     }
 
     // Increment hit count
-    await urlShortenerDB.supabase
-      .from("urlshortener")
-      .update({ hit_count: (entry.hit_count || 0) + 1 })
-      .eq("short_code", shortCode)
+    await urlShortenerDB.updateHitCount(
+      shortCode, (entry.hit_count || 0) + 1
+    )
 
     return NextResponse.redirect(entry.original_url)
 
