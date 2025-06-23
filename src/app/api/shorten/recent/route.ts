@@ -12,20 +12,26 @@ export async function GET() {
     )
   }
 
-  const result = await urlShortenerDB.list('*')
+  try {
 
-  // Convert Map to array and omit IP field
-  // Extract and format URLs
-  const urls = result.data
-    .map((item) => ({
-      shortCode: item.short_code,
-      url: item.original_url,
-      timestamp: new Date(item.created_at),
-    }))
-    .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-    .slice(0, 10)
+    const result = await urlShortenerDB.list('*')
 
-  return NextResponse.json({ urls })
+    // Convert Map to array and omit IP field
+    // Extract and format URLs
+    const urls = result.data
+      .map((item) => ({
+        shortCode: item.short_code,
+        url: item.original_url,
+        timestamp: new Date(item.created_at),
+      }))
+      .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+      .slice(0, 10)
+
+    return NextResponse.json({ urls })
+
+  } catch(error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
 
 }
 

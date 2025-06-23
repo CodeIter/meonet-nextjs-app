@@ -21,13 +21,19 @@ export async function GET(
 
   const { shortCode } = await params
 
-  const entry = await urlShortenerDB.get(shortCode)
+  try {
 
-  if (!entry) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 })
+    const entry = await urlShortenerDB.get(shortCode)
+
+    if (!entry) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 })
+    }
+
+    return NextResponse.redirect(entry.original_url)
+
+  } catch(error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
-
-  return NextResponse.redirect(entry.original_url)
 
 }
 

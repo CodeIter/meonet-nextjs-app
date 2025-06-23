@@ -20,15 +20,22 @@ export async function GET(
   }
 
   const { id } = await params
-  const paste = await pastebinDB.get(id)
 
-  if (!paste) {
-    return NextResponse.json({ error: "Paste not found" }, { status: 404 })
+  try {
+
+    const paste = await pastebinDB.get(id)
+
+    if (!paste) {
+      return NextResponse.json({ error: "Paste not found" }, { status: 404 })
+    }
+
+    // Omit sensitive fields
+    const { password_hash, salt, iv, ...safePaste } = paste
+    return NextResponse.json(safePaste)
+
+  } catch(error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
-
-  // Omit sensitive fields
-  const { password_hash, salt, iv, ...safePaste } = paste
-  return NextResponse.json(safePaste)
 
 }
 

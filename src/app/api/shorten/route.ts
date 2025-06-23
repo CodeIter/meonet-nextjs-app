@@ -32,15 +32,21 @@ export async function POST(request: NextRequest) {
   const shortCode = generateShortCode()
   const timestamp = new Date()
 
-  // Add to store (will auto-evict old entries if needed)
-  await urlShortenerDB.set(shortCode, {
-    short_code: shortCode,
-    original_url: url,
-    ip,
-    created_at: timestamp.toISOString()
-  })
+  try {
 
-  return NextResponse.json({ shortCode })
+    // Add to store (will auto-evict old entries if needed)
+    await urlShortenerDB.set(shortCode, {
+      short_code: shortCode,
+      original_url: url,
+      ip,
+      created_at: timestamp.toISOString()
+    })
+
+    return NextResponse.json({ shortCode })
+
+  } catch(error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
 
 }
 

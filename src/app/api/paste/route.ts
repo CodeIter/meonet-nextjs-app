@@ -63,23 +63,29 @@ export async function POST(request: NextRequest) {
     ]).toString("base64")
   }
 
-  // For client-side encryption, we store encrypted content directly
-  // and don't store password or IV
-  await pastebinDB.set(id, {
-    id,
-    title: title || "Untitled",
-    content: encryptedContent,
-    encryption,
-    password_hash: passwordHash,
-    salt,
-    iv: iv ? iv.toString("base64") : undefined,
-    cipher_algorithm,
-    created_at: timestamp.toISOString(),
-    syntax: syntax || "text",
-    keywords: keywords || []
-  })
+  try {
 
-  return NextResponse.json({ id })
+    // For client-side encryption, we store encrypted content directly
+    // and don't store password or IV
+    await pastebinDB.set(id, {
+      id,
+      title: title || "Untitled",
+      content: encryptedContent,
+      encryption,
+      password_hash: passwordHash,
+      salt,
+      iv: iv ? iv.toString("base64") : undefined,
+      cipher_algorithm,
+      created_at: timestamp.toISOString(),
+      syntax: syntax || "text",
+      keywords: keywords || []
+    })
+
+    return NextResponse.json({ id })
+
+  } catch(error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
 
 }
 

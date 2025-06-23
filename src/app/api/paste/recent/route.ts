@@ -12,20 +12,26 @@ export async function GET() {
     )
   }
 
-  const result = await pastebinDB.list('*')
+  try {
 
-  // Convert Map to array and exclude sensitive fields
-  // Extract and format pastes
-  const pastes = result.data
-    .map((item) => ({
-      id: item.id,
-      title: item.title,
-      timestamp: new Date(item.created_at),
-    }))
-    .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-    .slice(0, 10)
+    const result = await pastebinDB.list('*')
 
-  return NextResponse.json({ pastes })
+    // Convert Map to array and exclude sensitive fields
+    // Extract and format pastes
+    const pastes = result.data
+      .map((item) => ({
+        id: item.id,
+        title: item.title,
+        timestamp: new Date(item.created_at),
+      }))
+      .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+      .slice(0, 10)
+
+    return NextResponse.json({ pastes })
+
+  } catch(error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
 
 }
 
