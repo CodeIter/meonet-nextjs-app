@@ -25,8 +25,7 @@ export async function GET(request: NextRequest) {
 
     // Convert Map to array and omit IP field
     // Extract and format URLs
-    const urls = result.data
-      .filter(item => item.ip === ip)
+    const urls = result
       .map((item) => ({
         shortCode: item.short_code,
         shortUrl: `${BASE_URL}/r/${item.short_code}`,
