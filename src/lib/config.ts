@@ -4,9 +4,9 @@ export const HOST: string = process.env.HOST
                      || '0.0.0.0'
 export const PORT: number = parseInt(process.env.PORT || '3000') || 3000
 
-export const VERCEL_URL: string | undefined = process.env.VERCEL_URL
+export const VERCEL_PROJECT_PRODUCTION_URL: string | undefined = process.env.VERCEL_PROJECT_PRODUCTION_URL
 
-export const PROTO: string = VERCEL_URL
+export const PROTO: string = VERCEL_PROJECT_PRODUCTION_URL
                              ? 'https'
                              : (process.env.PROTO || 'http')
 //const PROTO: string = process.env.PROTO || 'http'
@@ -14,7 +14,7 @@ export const PROTO: string = VERCEL_URL
 // Base URL for the application
 export const BASE_URL: string = process.env.BASE_URL
   || (
-    VERCEL_URL ? `${PROTO}://${VERCEL_URL}` : `${PROTO}://${HOST}:${PORT}`
+    VERCEL_PROJECT_PRODUCTION_URL ? `${PROTO}://${VERCEL_PROJECT_PRODUCTION_URL}` : `${PROTO}://${HOST}:${PORT}`
   )
 
 // Supabase configuration
@@ -28,6 +28,8 @@ export const PUBLIC_SUPABASE_ANON_KEY: string | undefined =
 export const config = {
 
   HOST, PORT, PROTO,
+
+  VERCEL_PROJECT_PRODUCTION_URL,
 
   BASE_URL,
 
