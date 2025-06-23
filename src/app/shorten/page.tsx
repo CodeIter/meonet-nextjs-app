@@ -7,7 +7,6 @@ import { LinkIcon, CopyIcon, CheckIcon, ExternalLinkIcon } from 'lucide-react'
 interface UrlEntry {
   shortCode: string
   url: string
-  timestamp: Date
 }
 
 export default function ShortenPage() {
@@ -35,12 +34,17 @@ export default function ShortenPage() {
     checkStorage()
   }, [])
 
-  // Fetch recent URLs on component mount
   useEffect(() => {
-    fetch('/api/url/shorten/recent')
-      .then(res => res.json())
-      .then(data => setRecentUrls(data.urls))
-      .catch(() => setError('Failed to load recent URLs'))
+    // Load recent URLs from localStorage
+    try {
+      const savedUrls = localStorage.getItem('recentUrls')
+      if (savedUrls) {
+        setRecentUrls(JSON.parse(savedUrls))
+      }
+    } catch (error) {
+      console.error('Failed to load recent URLs from localStorage', error)
+      setError('Failed to load recent URLs')
+    }
   }, [])
 
   if (isAvailable === null) {
@@ -80,7 +84,13 @@ export default function ShortenPage() {
         throw new Error(data.error || 'Failed to shorten URL')
       }
 
+      const newUrlEntry = { shortCode: data.shortCode, url }
+      const updatedUrls = [ newUrlEntry, ...recentUrls ]
+
+      setRecentUrls(updatedUrls)
+      localStorage.setItem('recentUrls', JSON.stringify(updatedUrls))
       setShortCode(data.shortCode)
+
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
@@ -102,6 +112,12 @@ export default function ShortenPage() {
   const openShortUrl = () => {
     const shortUrl = `${window.location.origin}/r/${shortCode}`
     window.open(shortUrl, '_blank')
+  }
+
+  function correctUrl(input: string): string {
+    if (!input) return ''
+    if (/^https?:\/\//i.test(input)) return input
+    return `https://${input.replace(/^\/+/, '')}`
   }
 
   return (
@@ -127,7 +143,10 @@ export default function ShortenPage() {
                 type="url"
                 id="url"
                 value={url}
-                onChange={(e) => setUrl(e.target.value)}
+                onChange={(e) => {
+                  const corrected = correctUrl(e.target.value)
+                  setUrl(corrected)
+                }}
                 placeholder="https://example.com/very/long/url/that/needs/shortening"
                 className="input-field"
                 required
@@ -192,17 +211,36 @@ export default function ShortenPage() {
               {recentUrls.map((urlEntry, index) => (
                 <li key={index} className="bg-white p-3 rounded-lg shadow-sm border">
                   <div className="flex items-center justify-between">
-                    <a 
-                      href={`/r/${urlEntry.shortCode}`} 
+                    <a
+                      href={`/r/${urlEntry.shortCode}`}
                       className="text-blue-600 hover:underline truncate"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {`${window.location.origin}/r/${urlEntry.shortCode}`}
+                      {`/r/${urlEntry.shortCode}`}
                     </a>
-                    <button 
+                    <button
                       onClick={() => {
                         navigator.clipboard.writeText(`${window.location.origin}/r/${urlEntry.shortCode}`)
+                        setCopied(true)
+                        setTimeout(() => setCopied(false), 2000)
+                      }}
+                      className="ml-2 text-green-600 hover:text-green-800"
+                    >
+                      {copied ? <CheckIcon size={16} /> : <CopyIcon size={16} />}
+                    </button>
+                    <span className="text-green-600 font-bold">&nbsp;&rArr;&nbsp;</span>
+                    <a
+                      href={`${urlEntry.url}`}
+                      className="text-blue-600 hover:underline truncate"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {`${urlEntry.url}`}
+                    </a>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${urlEntry.url}`)
                         setCopied(true)
                         setTimeout(() => setCopied(false), 2000)
                       }}
@@ -247,3 +285,4 @@ export default function ShortenPage() {
     </main>
   )
 }
+
