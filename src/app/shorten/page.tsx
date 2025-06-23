@@ -176,7 +176,7 @@ export default function ShortenPage() {
 
               <div className="flex items-center gap-2 p-3 bg-white border border-green-300 rounded-lg mb-4">
                 <code className="flex-1 text-green-700 font-mono text-sm">
-                  {`${window.location.origin}/r/${shortCode}`}
+                  {`/r/${shortCode}`}
                 </code>
                 <button
                   onClick={copyToClipboard}
