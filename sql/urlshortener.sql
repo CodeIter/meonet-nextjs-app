@@ -2,6 +2,7 @@
 CREATE TABLE IF NOT EXISTS urlshortener (
   short_code TEXT PRIMARY KEY,
   original_url TEXT NOT NULL,
+  hit_count INTEGER DEFAULT 0,
   ip TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -13,6 +14,13 @@ ALTER TABLE public.urlshortener ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Enable write access for all users"
 ON public.urlshortener
 FOR INSERT
+TO anon
+USING (true)
+WITH CHECK (true);
+
+CREATE POLICY "Enable update access for all users"
+ON public.urlshortener
+FOR UPDATE
 TO anon
 USING (true)
 WITH CHECK (true);

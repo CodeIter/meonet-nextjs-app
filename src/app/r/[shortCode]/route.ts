@@ -29,6 +29,12 @@ export async function GET(
       return NextResponse.json({ error: "Not found" }, { status: 404 })
     }
 
+    // Increment hit count
+    await urlShortenerDB.supabase
+      .from("urlshortener")
+      .update({ hit_count: (entry.hit_count || 0) + 1 })
+      .eq("short_code", shortCode)
+
     return NextResponse.redirect(entry.original_url)
 
   } catch (err: unknown) {

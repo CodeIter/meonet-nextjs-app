@@ -6,6 +6,7 @@ import { SupabaseRepository } from '@/lib/storage/SupabaseRepository'
 export interface URLShortenerItem {
   short_code: string;
   original_url: string;
+  hit_count?: number;
   ip: string;
   created_at: string;
 }
