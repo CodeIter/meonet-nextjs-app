@@ -38,7 +38,7 @@ export class PastebinRepository extends SupabaseRepository<PastebinItem, 'id'> {
   }
 
   /**
-   * Find pastes by syntax or keywords.
+   * Find pastes by syntax.
    */
   async findBySyntax(syntax: string): Promise<PastebinItem[]> {
     return this.find('*', { syntax })
