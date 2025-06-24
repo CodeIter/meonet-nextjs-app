@@ -182,7 +182,7 @@ const encryptContent = async (content: string, password: string): Promise<{
   }
 
   const copyToClipboard = async () => {
-    const pasteUrl = `${window.location.origin}/api/paste/${pasteId}`
+    const pasteUrl = `${window.location.origin}/paste/${pasteId}`
     try {
       await navigator.clipboard.writeText(pasteUrl)
       setCopied(true)
@@ -392,7 +392,7 @@ const encryptContent = async (content: string, password: string): Promise<{
 
               <div className="flex items-center gap-2 p-3 bg-white border border-green-300 rounded-lg mb-4">
                 <code className="flex-1 text-green-700 font-mono text-sm break-all">
-                  {`${window.location.origin}/api/paste/${pasteId}`}
+                  {`${window.location.origin}/paste/${pasteId}`}
                 </code>
                 <button
                   onClick={copyToClipboard}
