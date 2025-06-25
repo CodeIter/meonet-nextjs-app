@@ -437,13 +437,13 @@ const encryptContent = async (content: string, password: string): Promise<{
               {recentPastes.map((paste, index) => (
                 <li key={index} className="bg-white p-3 rounded-lg shadow-sm border">
                   <div className="flex items-center justify-between">
-                    <Link 
+                    <Link
                       href={`/paste/${paste.id}`} 
                       className="text-blue-600 hover:underline truncate"
                     >
-                      {paste.title || 'Untitled'}
+                      <span dir="auto">{paste.title || 'Untitled'}</span>
                     </Link>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-gray-500" dir="auto">
                       {new Date(paste.timestamp).toLocaleDateString()}
                     </span>
                   </div>

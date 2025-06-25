@@ -222,7 +222,7 @@ export default function PasteViewPage() {
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
                 <FileTextIcon className="w-6 h-6 text-green-600" />
-                <h1 className="text-2xl font-bold text-gray-900">{paste.title}</h1>
+                <h1 className="text-2xl font-bold text-gray-900" dir="auto">{paste.title}</h1>
                 {paste.encryption !== 'none' && (
                   <div className="flex items-center gap-1 bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">
                     <LockIcon className="w-3 h-3" />
@@ -234,7 +234,7 @@ export default function PasteViewPage() {
               <div className="flex items-center gap-4 text-sm text-gray-600">
                 <div className="flex items-center gap-1">
                   <CalendarIcon className="w-4 h-4" />
-                  {formatDate(paste.created_at)}
+                  <span dir="auto">{formatDate(paste.created_at)}</span>
                 </div>
                 {paste.syntax && (
                   <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
@@ -273,7 +273,7 @@ export default function PasteViewPage() {
         {/* Content */}
         <div className="card">
           <div className="bg-gray-50 rounded-lg p-4 border">
-            <pre className="whitespace-pre-wrap font-mono text-sm text-gray-800 overflow-x-auto">
+            <pre className="whitespace-pre-wrap font-mono text-sm text-gray-800 overflow-x-auto" dir="auto">
               {paste.content}
             </pre>
           </div>
