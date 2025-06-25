@@ -1,9 +1,11 @@
 
-import { NextRequest, NextResponse } from "next/server"
+import { type NextRequest, NextResponse } from "next/server"
+
 import { v4 as uuidv4 } from "uuid"
 import bcrypt from "bcryptjs"
 import crypto from "crypto"
 
+import { getClientIp } from "@/lib/utils"
 import { pastebinDB } from '@/lib/storage'
 
 function generateSalt(length: number = 16): string {
@@ -20,6 +22,8 @@ export async function POST(request: NextRequest) {
       { status: 503 } // Service Unavailable
     )
   }
+
+  const ip = getClientIp(request)
 
   const {
     title,
@@ -71,6 +75,7 @@ export async function POST(request: NextRequest) {
       id,
       title: title || "Untitled",
       content: encryptedContent,
+      ip,
       encryption,
       password_hash: passwordHash,
       salt,

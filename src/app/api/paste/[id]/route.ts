@@ -30,7 +30,7 @@ export async function GET(
     }
 
     // Omit sensitive fields
-    const { password_hash, salt, iv, ...safePaste } = paste
+    const { password_hash, salt, iv, ip, ...safePaste } = paste
     return NextResponse.json(safePaste)
 
   } catch (err: unknown) {

@@ -7,6 +7,7 @@ export interface PastebinItem {
   id: string;
   title: string;
   content: string;
+  ip: string;
   encryption: string;
   password_hash: string | null;
   salt: string | null;

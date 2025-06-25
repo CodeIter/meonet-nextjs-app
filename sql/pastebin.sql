@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS pastebin (
   id UUID PRIMARY KEY,
   title TEXT NOT NULL,
   content TEXT NOT NULL,
+  ip TEXT NOT NULL DEFAULT 'unknown',
   encryption TEXT NOT NULL,
   password_hash TEXT,
   salt TEXT,

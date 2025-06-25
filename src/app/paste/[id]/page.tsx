@@ -12,7 +12,7 @@ interface PasteData {
   encryption: 'none' | 'client' | 'server'
   salt: string | null
   iv: string | null
-  timestamp: string
+  created_at: string
   syntax?: string
   keywords?: string[]
 }
@@ -43,7 +43,7 @@ export default function PasteViewPage() {
         setNeedsPassword(true)
       }
 
-      setPaste(data)
+      setPaste({ ...data, created_at: new Date(data.created_at) })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load paste')
     } finally {
@@ -234,7 +234,7 @@ export default function PasteViewPage() {
               <div className="flex items-center gap-4 text-sm text-gray-600">
                 <div className="flex items-center gap-1">
                   <CalendarIcon className="w-4 h-4" />
-                  {formatDate(paste.timestamp)}
+                  {formatDate(paste.created_at)}
                 </div>
                 {paste.syntax && (
                   <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">

@@ -1,9 +1,10 @@
 
-import { NextResponse } from "next/server"
+import { type NextRequest, NextResponse } from "next/server"
 
+import { getClientIp } from "@/lib/utils"
 import { pastebinDB } from "@/lib/storage"
 
-export async function GET() {
+export async function GET(request: NextRequest) {
 
   if (!pastebinDB) {
     return NextResponse.json(
@@ -12,13 +13,15 @@ export async function GET() {
     )
   }
 
+  const ip = getClientIp(request)
+
   try {
 
-    const result = await pastebinDB.list('*')
+    const result = await pastebinDB.find('*', { ip })
 
     // Convert Map to array and exclude sensitive fields
     // Extract and format pastes
-    const pastes = result.data
+    const pastes = result
       .map((item) => ({
         id: item.id,
         title: item.title,
