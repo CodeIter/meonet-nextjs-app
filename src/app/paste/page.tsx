@@ -84,10 +84,12 @@ const encryptContent = async (content: string, password: string): Promise<{
     encrypted: string;
     salt: string;
     iv: string;
+    cipher_algorithm: string;
   }> => {
     const encoder = new TextEncoder()
     const salt = crypto.getRandomValues(new Uint8Array(16))
     const iv = crypto.getRandomValues(new Uint8Array(12))
+    const cipher_algorithm = 'AES-GCM'
 
     const keyMaterial = await crypto.subtle.importKey(
       'raw',
@@ -105,13 +107,13 @@ const encryptContent = async (content: string, password: string): Promise<{
         hash: 'SHA-256',
       },
       keyMaterial,
-      { name: 'AES-GCM', length: 256 },
+      { name: cipher_algorithm, length: 256 },
       true,
       ['encrypt']
     )
 
     const encryptedData = await crypto.subtle.encrypt(
-      { name: 'AES-GCM', iv },
+      { name: cipher_algorithm, iv },
       key,
       encoder.encode(content)
     )
@@ -124,6 +126,7 @@ const encryptContent = async (content: string, password: string): Promise<{
       encrypted: arrayBufferToBase64(encryptedData),
       salt: arrayBufferToBase64(salt.buffer),
       iv: arrayBufferToBase64(iv.buffer),
+      cipher_algorithm
     }
   }
 
@@ -135,14 +138,16 @@ const encryptContent = async (content: string, password: string): Promise<{
     let encryptedContent = content
     let salt = null
     let iv = null
+    let cipher_algorithm = null
 
     try {
 
       if (encryption === 'client' && password) {
-        const { encrypted, salt: s, iv: i } = await encryptContent(content, password)
+        const { encrypted, salt: s, iv: i, cipher_algorithm: c_alg } = await encryptContent(content, password)
         encryptedContent = encrypted
         salt = s
         iv = i
+        cipher_algorithm = c_alg
       }
 
       const keywordArray = keywords
@@ -162,6 +167,7 @@ const encryptContent = async (content: string, password: string): Promise<{
           password: encryption === 'server' ? password : undefined,
           salt,
           iv,
+          cipher_algorithm,
           syntax: syntax || undefined,
           keywords: keywordArray.length > 0 ? keywordArray : undefined,
         }),

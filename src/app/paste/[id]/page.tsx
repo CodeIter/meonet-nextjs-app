@@ -10,8 +10,6 @@ interface PasteData {
   title: string
   content: string
   encryption: 'none' | 'client' | 'server'
-  salt: string | null
-  iv: string | null
   created_at: string
   syntax?: string
   keywords?: string[]
@@ -39,7 +37,7 @@ export default function PasteViewPage() {
         throw new Error(data.error || 'Paste not found')
       }
 
-      if (data.encryption === 'server' && data.content.includes('base64')) {
+      if (data.encryption === 'server' || data.encryption === 'client') {
         setNeedsPassword(true)
       }
 
@@ -57,48 +55,84 @@ export default function PasteViewPage() {
 
   const decryptContent = async () => {
     if (!paste || !password) return
-
     setIsDecrypting(true)
-    setError('')
+    setError("")
 
     try {
-      const encoder = new TextEncoder()
-      const decoder = new TextDecoder()
+      if (paste.encryption === "server") {
 
-      const salt = base64ToArrayBuffer(paste.salt!)
-      const iv = base64ToArrayBuffer(paste.iv!)
+        // Decrypt via server-side API
+        const response = await fetch(`/api/paste/${paste.id}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password }),
+        })
 
-      const keyMaterial = await crypto.subtle.importKey(
-        'raw',
-        encoder.encode(password),
-        { name: 'PBKDF2' },
-        false,
-        ['deriveKey']
-      )
+        const data = await response.json()
 
-      const key = await crypto.subtle.deriveKey(
-        {
-          name: 'PBKDF2',
-          salt,
-          iterations: 100000,
-          hash: 'SHA-256',
-        },
-        keyMaterial,
-        { name: 'AES-GCM', length: 256 },
-        true,
-        ['decrypt']
-      )
+        if (!response.ok) {
+          throw new Error(data.error || "Decryption failed")
+        }
 
-      const decryptedData = await crypto.subtle.decrypt(
-        { name: 'AES-GCM', iv },
-        key,
-        base64ToArrayBuffer(paste.content)
-      )
+        setPaste({ ...paste, content: data.content })
+        setNeedsPassword(false)
 
-      setPaste({ ...paste, content: decoder.decode(decryptedData) })
-      setNeedsPassword(false)
+      } else if (paste.encryption === "client") {
+
+        // Fetch sensitive fields needed for decryption
+        const sensitiveRes = await fetch(`/api/paste/get-client-sensitive/${paste.id}`)
+        const sensitiveData = await sensitiveRes.json()
+
+        if (!sensitiveRes.ok) {
+          throw new Error(sensitiveData.error || "Failed to retrieve decryption metadata")
+        }
+
+        const { salt: saltB64, iv: ivB64, cipher_algorithm } = sensitiveData
+
+        const encoder = new TextEncoder()
+        const decoder = new TextDecoder()
+
+        const salt = base64ToArrayBuffer(saltB64)
+        const iv = base64ToArrayBuffer(ivB64)
+
+        const keyMaterial = await crypto.subtle.importKey(
+          "raw",
+          encoder.encode(password),
+          { name: "PBKDF2" },
+          false,
+          ["deriveKey"]
+        )
+
+        const key = await crypto.subtle.deriveKey(
+          {
+            name: "PBKDF2",
+            salt,
+            iterations: 100000,
+            hash: "SHA-256",
+          },
+          keyMaterial,
+          { name: cipher_algorithm, length: 256 },
+          true,
+          ["decrypt"]
+        )
+
+        const decryptedData = await crypto.subtle.decrypt(
+          { name: cipher_algorithm, iv },
+          key,
+          base64ToArrayBuffer(paste.content)
+        )
+
+        setPaste({ ...paste, content: decoder.decode(decryptedData) })
+        setNeedsPassword(false)
+
+      }
+
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to decrypt paste. Please check your password.')
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to decrypt paste. Please check your password."
+      )
     } finally {
       setIsDecrypting(false)
     }

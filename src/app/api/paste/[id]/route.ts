@@ -1,45 +1,5 @@
 
-import { NextRequest, NextResponse } from 'next/server'
+export { GET } from '@/app/api/paste/[id]/get.ts'
 
-import { pastebinDB } from '@/lib/storage'
-
-interface ContextProps {
-  params: Promise<{ id: string }>
-}
-
-export async function GET(
-  request: NextRequest,
-  { params }: ContextProps
-) {
-
-  if (!pastebinDB) {
-    return NextResponse.json(
-      { error: "Storage is not available" },
-      { status: 503 } // Service Unavailable
-    )
-  }
-
-  const { id } = await params
-
-  try {
-
-    const paste = await pastebinDB.get(id)
-
-    if (!paste) {
-      return NextResponse.json({ error: "Paste not found" }, { status: 404 })
-    }
-
-    // Omit sensitive fields
-    const { password_hash, salt, iv, ip, ...safePaste } = paste
-    return NextResponse.json(safePaste)
-
-  } catch (err: unknown) {
-    console.error(err)
-    if (err instanceof Error) {
-      return NextResponse.json({ error: err.message }, { status: 500 })
-    }
-    return NextResponse.json({ error: "Unknown error" }, { status: 500 })
-  }
-
-}
+export { POST } from '@/app/api/paste/[id]/post.ts'
 

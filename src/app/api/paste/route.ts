@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
     password,
     salt: _salt,
     iv: _iv,
+    cipher_algorithm: _cipher_algorithm,
     syntax,
     keywords,
   } = await request.json()
@@ -49,7 +50,7 @@ export async function POST(request: NextRequest) {
   let passwordHash = undefined
   let salt = _salt
   let iv = _iv
-  let cipher_algorithm = undefined
+  let cipher_algorithm = _cipher_algorithm
 
   if (encryption === "server" && password) {
     // Generate salt and hash password
@@ -59,7 +60,7 @@ export async function POST(request: NextRequest) {
     // Generate encryption IV
     iv = crypto.randomBytes(16)
     const key = crypto.scryptSync(password, salt, 32)
-    cipher_algorithm = "aes-256-cbc"
+    cipher_algorithm = "aes-256-gcm"
     const cipher = crypto.createCipheriv(cipher_algorithm, key, iv)
     encryptedContent = Buffer.concat([
       cipher.update(content, "utf8"),
