@@ -53,16 +53,55 @@ export async function POST(request: NextRequest, { params }: ContextProps) {
       )
     }
 
-    // Decrypt the content using scrypt + AES-256-CBC
-    const key = crypto.scryptSync(password, paste.salt || "", 32)
-    const decipher = crypto.createDecipheriv(
-      paste.cipher_algorithm || "aes-256-cbc",
-      key,
-      Buffer.from(paste.iv || "", "base64")
-    )
+    let decryptedContent = null
 
-    let decryptedContent = decipher.update(paste.content, "base64", "utf8")
-    decryptedContent += decipher.final("utf8")
+    try {
+
+      if (paste.cipher_algorithm === "aes-256-gcm") {
+
+        // Split ciphertext and tag
+        // TODO (delayed) Consider use the tag from the database.
+        const [cipherText, tag] = paste.content.split(".")
+        const key = crypto.scryptSync(password, paste.salt || "", 32)
+        const decipher = crypto.createDecipheriv(
+          paste.cipher_algorithm || "aes-256-gcm",
+          key,
+          Buffer.from(paste.iv || "", "base64")
+        )
+        // Set authentication tag
+        decipher.setAuthTag(Buffer.from(tag, "base64"))
+        // Decrypt
+        decryptedContent = decipher.update(cipherText, "base64", "utf8")
+        decryptedContent += decipher.final("utf8")
+
+      } else if (paste.cipher_algorithm === "aes-256-cbc") {
+
+        // Decrypt the content using scrypt + AES-256-CBC
+        const key = crypto.scryptSync(password, paste.salt || "", 32)
+        const decipher = crypto.createDecipheriv(
+          paste.cipher_algorithm || "aes-256-cbc",
+          key,
+          Buffer.from(paste.iv || "", "base64")
+        )
+        decryptedContent = decipher.update(paste.content, "base64", "utf8")
+        decryptedContent += decipher.final("utf8")
+
+      } else {
+
+        return NextResponse.json(
+          { error: `cipher_algorithm '${cipher_algorithm}' not supported` },
+          { status: 400 }
+        )
+
+      }
+
+    } catch(err: unknown) {
+      console.error(err)
+      if (err instanceof Error) {
+        return NextResponse.json({ error: `Decryption fail. ${err.message}` }, { status: 400 })
+      }
+      return NextResponse.json({ error: "Decryption fail" }, { status: 400 })
+    }
 
     // Exclude sensitive fields
     const {

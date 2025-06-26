@@ -88,6 +88,9 @@ const encryptContent = async (content: string, password: string): Promise<{
   }> => {
     const encoder = new TextEncoder()
     const salt = crypto.getRandomValues(new Uint8Array(16))
+    // Generate encryption IV
+    // 12-byte IV for GCM
+    // 16-byte IV for CBC
     const iv = crypto.getRandomValues(new Uint8Array(12))
     const cipher_algorithm = 'AES-GCM'
 

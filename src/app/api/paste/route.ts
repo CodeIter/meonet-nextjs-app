@@ -53,19 +53,38 @@ export async function POST(request: NextRequest) {
   let cipher_algorithm = _cipher_algorithm
 
   if (encryption === "server" && password) {
+
     // Generate salt and hash password
     passwordHash = await bcrypt.hash(password, 10)
     // generate salt
-    salt = generateSalt(20)
+    salt = generateSalt(16)
     // Generate encryption IV
-    iv = crypto.randomBytes(16)
+    // 12-byte IV for GCM
+    // 16-byte IV for CBC
+    iv = crypto.randomBytes(12)
     const key = crypto.scryptSync(password, salt, 32)
     cipher_algorithm = "aes-256-gcm"
     const cipher = crypto.createCipheriv(cipher_algorithm, key, iv)
-    encryptedContent = Buffer.concat([
-      cipher.update(content, "utf8"),
-      cipher.final(),
-    ]).toString("base64")
+
+    if (cipher_algorithm === "aes-256-gcm") {
+
+    // Encrypt and separate authentication tag
+    encryptedContent = cipher.update(content, "utf8", "base64")
+    encryptedContent += cipher.final("base64")
+    const tag = cipher.getAuthTag() // Get authentication tag
+    // Store ciphertext + tag in a single field
+    // TODO (delayed) Consider storing the tag separately in the database.
+    encryptedContent = `${encryptedContent}.${tag.toString("base64")}`
+
+    } else if (cipher_algorithm === "aes-256-cbc") {
+
+      encryptedContent = Buffer.concat([
+        cipher.update(content, "utf8"),
+        cipher.final()
+      ]).toString("base64")
+
+    }
+
   }
 
   try {
@@ -80,7 +99,7 @@ export async function POST(request: NextRequest) {
       encryption,
       password_hash: passwordHash,
       salt,
-      iv: iv ? iv.toString("base64") : undefined,
+      iv: iv instanceof Buffer ? iv.toString("base64") : iv,
       cipher_algorithm,
       created_at: timestamp.toISOString(),
       syntax: syntax || "text",
