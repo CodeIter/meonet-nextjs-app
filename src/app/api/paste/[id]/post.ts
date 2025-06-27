@@ -61,7 +61,11 @@ export async function POST(request: NextRequest, { params }: ContextProps) {
 
         // Split ciphertext and tag
         // TODO (delayed) Consider use the tag from the database.
-        const [cipherText, tag] = paste.content.split(".")
+        const parts = paste.content.split(".")
+        if (parts.length === 0) {
+          return NextResponse.json({ error: "Invalid content format" }, { status: 400 })
+        }
+        const [cipherText, tag] = parts
         if (!tag) {
           return NextResponse.json(
             { error: "Missing authentication tag in encrypted content" },
