@@ -62,6 +62,12 @@ export async function POST(request: NextRequest, { params }: ContextProps) {
         // Split ciphertext and tag
         // TODO (delayed) Consider use the tag from the database.
         const [cipherText, tag] = paste.content.split(".")
+        if (!tag) {
+          return NextResponse.json(
+            { error: "Missing authentication tag in encrypted content" },
+            { status: 400 }
+          )
+        }
         const key = crypto.scryptSync(password, paste.salt || "", 32)
         const decipher = crypto.createDecipheriv(
           paste.cipher_algorithm || "aes-256-gcm",
