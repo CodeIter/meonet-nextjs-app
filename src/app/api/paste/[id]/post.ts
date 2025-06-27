@@ -105,7 +105,7 @@ export async function POST(request: NextRequest, { params }: ContextProps) {
       } else {
 
         return NextResponse.json(
-          { error: `cipher_algorithm '${cipher_algorithm}' not supported` },
+          { error: `cipher_algorithm '${paste.cipher_algorithm}' not supported` },
           { status: 400 }
         )
 
