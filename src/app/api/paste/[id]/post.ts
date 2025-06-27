@@ -66,6 +66,12 @@ export async function POST(request: NextRequest, { params }: ContextProps) {
           return NextResponse.json({ error: "Invalid content format" }, { status: 400 })
         }
         const [cipherText, tag] = parts
+        if (!cipherText) {
+          return NextResponse.json(
+            { error: "Ciphertext is empty or missing" },
+            { status: 400 }
+          )
+        }
         if (!tag) {
           return NextResponse.json(
             { error: "Missing authentication tag in encrypted content" },
