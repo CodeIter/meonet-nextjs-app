@@ -11,8 +11,8 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center text-gray-600">
           <p>&copy; 2025 Web App. Built with ❤️ by @{gitUsername}</p>
-          <p className="mt-2 text-sm">
-            MIT License - Free for personal and commercial use
+          <p className="mt-2 text-sm text-center">
+            MIT License
           </p>
           <div className="mt-4 flex justify-center gap-4 text-sm">
             <a href="https://nextjs.org"  className="hover:text-blue-600 transition-colors">Next.js</a>
