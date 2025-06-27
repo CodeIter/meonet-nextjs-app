@@ -9,8 +9,6 @@ import './globals.css'
 import Navigation from '@/components/Navigation'
 import StorageWarning from '@/components/StorageWarning'
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
-import PWAInstallButton from '@/components/PWAInstallButton'
-
 import metadata from '@/app/metadata'
 import Footer from '@/components/Footer'
 
@@ -34,7 +32,6 @@ export default function RootLayout({
         <div className="flex-1">
           <StorageWarning />
           {children}
-          <PWAInstallButton />
         </div>
         <Footer />
         <ServiceWorkerRegistration />
