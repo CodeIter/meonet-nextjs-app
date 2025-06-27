@@ -24,6 +24,31 @@ const nextConfig: NextConfig = {
   // Enable standalone output mode
   output: 'standalone',
 
+  async redirects() {
+    return [
+      {
+        source: '/p/:id',
+        destination: '/paste/:id',
+        permanent: true,
+      },
+      {
+        source: '/b/:id',
+        destination: '/paste/:id',
+        permanent: true,
+      },
+      {
+        source: '/p',
+        destination: '/paste',
+        permanent: true,
+      },
+      {
+        source: '/b',
+        destination: '/paste',
+        permanent: true,
+      }
+    ]
+  },
+
   // Add security headers as per Next.js PWA docs
   async headers() {
     return [
