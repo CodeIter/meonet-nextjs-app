@@ -47,6 +47,33 @@ export default function ShortenPage() {
     }
   }, [])
 
+  useEffect(() => {
+    const syncWithServer = async () => {
+      try {
+        const res = await fetch('/api/url/shorten/recent')
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error || 'Failed to fetch recent URLs')
+        const serverUrls = data.urls
+        // Load from localStorage again in case it changed
+        const savedUrls = JSON.parse(localStorage.getItem('recentUrls') || '[]')
+        // Merge and deduplicate by shortCode
+        const mergedUrls = Array.from(
+          new Map([...serverUrls, ...savedUrls].map(url => [url.shortCode, url])).values()
+        )
+        // Sort by timestamp descending
+        mergedUrls.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+        // Keep only the most recent 10
+        const updatedUrls = mergedUrls.slice(0, 10)
+        // Update both localStorage and state
+        localStorage.setItem('recentUrls', JSON.stringify(updatedUrls))
+        setRecentUrls(updatedUrls)
+      } catch (err) {
+        console.error('Failed to sync with server', err)
+      }
+    }
+    syncWithServer()
+  }, [])
+
   if (isAvailable === null) {
     return (
       <div className="flex items-center justify-center min-h-screen">
