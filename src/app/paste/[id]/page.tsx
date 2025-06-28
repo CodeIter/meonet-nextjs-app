@@ -27,6 +27,7 @@ export default function PasteViewPage() {
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState('')
   const [needsPassword, setNeedsPassword] = useState(false)
+  const [isPasswordWrong, setIsPasswordWrong] = useState(false)
 
   const fetchPaste = useCallback(async () => {
     try {
@@ -131,6 +132,7 @@ export default function PasteViewPage() {
     } catch (err) {
       console.error(err)
       setNeedsPassword(true)
+      setIsPasswordWrong(true)
     } finally {
       setIsDecrypting(false)
     }
@@ -209,9 +211,12 @@ export default function PasteViewPage() {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                    setIsPasswordWrong(false)
+                  }}
                   placeholder="Enter password"
-                  className="input-field pr-10"
+                  className={`input-field pr-10 ${isPasswordWrong ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}`}
                   required
                 />
                 <button
