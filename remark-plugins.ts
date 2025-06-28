@@ -2,12 +2,12 @@ import { Pluggable } from "unified"
 
 // Import remark plugins you want to use
 
+import remarkFrontmatter from 'remark-frontmatter'
+
 import remarkGfm from 'remark-gfm'
 import remarkGithub from 'remark-github'
 import remarkGemoji from 'remark-gemoji'
 
-//import remarkFrontmatter from
-//  'remark-frontmatter'
 //import remarkSqueezeParagraphs from
 //  'remark-squeeze-paragraphs'
 //import remarkSmartypants from 'remark-smartypants'
@@ -63,7 +63,7 @@ import remarkGemoji from 'remark-gemoji'
 
 export const remarkPlugins: Pluggable[] = [
 
-  //remarkFrontmatter,
+  remarkFrontmatter,
 
   remarkGfm,
   remarkGithub,
