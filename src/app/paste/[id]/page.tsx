@@ -59,6 +59,7 @@ export default function PasteViewPage() {
     setError("")
 
     try {
+
       if (paste.encryption === "server") {
 
         // Decrypt via server-side API
@@ -128,11 +129,8 @@ export default function PasteViewPage() {
       }
 
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to decrypt paste. Please check your password."
-      )
+      console.error(err)
+      setNeedsPassword(true)
     } finally {
       setIsDecrypting(false)
     }
