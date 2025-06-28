@@ -5,11 +5,19 @@
   "private": true,
   "description": "Next.js web app",
   "keywords": [
-    "nextjs", "vercel",
-    "react", "typescript", "tailwindcss",
-    "markdown", "mdx",
-    "api", "backend", "frontend", "pwa",
-    "url-shortener", "pastebin"
+    "nextjs",
+    "vercel",
+    "react",
+    "typescript",
+    "tailwindcss",
+    "markdown",
+    "mdx",
+    "api",
+    "backend",
+    "frontend",
+    "pwa",
+    "url-shortener",
+    "pastebin"
   ],
   "author": {
     "name": "Muhammad Amin Boubaker",
