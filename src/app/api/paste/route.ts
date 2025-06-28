@@ -106,7 +106,10 @@ export async function POST(request: NextRequest) {
       keywords: keywords || []
     })
 
-    return NextResponse.json({ id })
+    return NextResponse.json({
+      id,
+      created_at: timestamp.toISOString()
+    })
 
   } catch (err: unknown) {
     console.error(err)

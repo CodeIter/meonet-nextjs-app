@@ -42,12 +42,39 @@ export default function PastePage() {
     checkStorage()
   }, [])
 
-  // Fetch recent pastes on component mount
   useEffect(() => {
-    fetch('/api/paste/recent')
-      .then(res => res.json())
-      .then(data => setRecentPastes(data.pastes))
-      .catch(() => setError('Failed to load recent pastes'))
+    try {
+      const savedPastes = localStorage.getItem('recentPastes')
+      if (savedPastes) {
+        setRecentPastes(JSON.parse(savedPastes))
+      }
+    } catch (err) {
+      console.error('Failed to load recent pastes from localStorage', err)
+      setError('Failed to load recent pastes')
+    }
+  }, [])
+
+  useEffect(() => {
+    const fetchFromServer = async () => {
+      try {
+        const res = await fetch('/api/paste/recent')
+        const data = await res.json()
+        const serverPastes = data.pastes
+        const savedPastes = JSON.parse(localStorage.getItem('recentPastes') || '[]')
+        // Merge and deduplicate by ID
+        const mergedPastes = Array.from(
+          new Map([...serverPastes, ...savedPastes].map(p => [p.id, p])).values()
+        )
+        // Sort by timestamp descending
+        mergedPastes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+        const updatedPastes = mergedPastes.slice(0, 10)
+        localStorage.setItem('recentPastes', JSON.stringify(updatedPastes))
+        setRecentPastes(updatedPastes)
+      } catch (err) {
+        console.error('Failed to sync with server', err)
+      }
+    }
+    fetchFromServer()
   }, [])
 
   if (isAvailable === null) {
@@ -182,7 +209,24 @@ const encryptContent = async (content: string, password: string): Promise<{
         throw new Error(data.error || 'Failed to create paste')
       }
 
+      const updatedPastes = [
+        {
+          id: data.id,
+          title: title || 'Untitled',
+          timestamp: data.created_at,
+        },
+        ...recentPastes
+      ]
+
+      try {
+        localStorage.setItem('recentPastes', JSON.stringify(updatedPastes))
+        setRecentPastes(updatedPastes)
+      } catch (err) {
+        console.error('Failed to update localStorage after paste submission', err)
+      }
+
       setPasteId(data.id)
+
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
