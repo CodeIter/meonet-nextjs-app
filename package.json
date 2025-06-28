@@ -1,18 +1,15 @@
 {
   "name": "web-app",
-  "version": "1.0.0",
+  "version": "2.1.1",
   "license": "MIT",
   "private": true,
-  "description": "Next.js web app with api and blog",
+  "description": "Next.js web app",
   "keywords": [
-    "blog",
-    "markdown",
-    "nextjs",
-    "react",
-    "typescript",
-    "tailwindcss",
-    "api",
-    "frontend"
+    "nextjs", "vercel",
+    "react", "typescript", "tailwindcss",
+    "markdown", "mdx",
+    "api", "backend", "frontend", "pwa",
+    "url-shortener", "pastebin"
   ],
   "author": {
     "name": "Muhammad Amin Boubaker",
