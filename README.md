@@ -8,7 +8,41 @@
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
 
-This is Next.js web app.
+This web application is a powerful, modern solution combining URL shortening
+and secure text sharing in one intuitive platform. Built using cutting-edge
+technologies like **Next.js**, **TypeScript**, **Tailwind CSS**, and
+**Supabase**, it offers seamless performance, robust security, and offline
+support via service workers.
+
+## Key Features
+
+- 📎 **URL Shortening**: Create compact links with analytics tracking.
+
+- 🔐 **Secure Text Sharing**: Share sensitive information with client-side
+or server-side encryption.
+
+- 🌐 **Syntax Highlighting**: Supports code pastes with syntax
+highlighting for popular programming languages.
+
+- 🏷️ **Keyword Tagging**: Easily organize your pastes using keyword tags.
+
+- 📦 **Offline Support**: Works even when you're offline thanks to
+Service Worker caching.
+
+- 📱 **Responsive Design**: Fully mobile-friendly and optimized for all
+screen sizes.
+
+- 🧪 **GitHub & Markdown Integration**: Render markdown beautifully and
+integrate with GitHub-flavored content.
+
+- ⚙️ **Middleware & Custom Headers**: Enhanced routing, logging, and header
+customization support.
+
+- 🔄 **LocalStorage Sync**: Recent URLs and pastes are persisted locally
+and synchronized with the server.
+
+- 🌃 **PWA Ready**: Installable as a Progressive Web App with custom
+icons and metadata.
 
 ## Getting Started
 
