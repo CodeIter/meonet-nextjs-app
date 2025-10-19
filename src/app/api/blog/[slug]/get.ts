@@ -15,9 +15,9 @@ export async function GET(
   { params }: ContextProps
 ) {
 
-  const { slug } = await params
+  const { slug: requestedSlug } = await params
 
-  const post: BlogPost = await getBlogPostBySlug(slug)
+  const post: BlogPost = await getBlogPostBySlug(requestedSlug)
 
   if (!post) {
     return NextResponse.json({ error: 'Post not found' }, { status: 404 })
