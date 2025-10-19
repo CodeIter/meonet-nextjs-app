@@ -90,7 +90,7 @@ export default function BlogPostPage({ params }: Props) {
         {/* Keywords */}
         {(post.keywords ?? []).length > 0 && (
           <div className="mt-4 flex flex-wrap gap-2">
-            {post.keywords.map((tag) => (
+            {(post.keywords ?? []).map((tag) => (
               <span
                 key={tag}
                 className="inline-block bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-xs font-medium px-2 py-1 rounded"
