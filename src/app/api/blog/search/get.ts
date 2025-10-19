@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
     const searchableText = `
       ${post.slug.toLowerCase()}
       ${post.title.toLowerCase()}
-      ${post.keywords.join(' ').toLowerCase() || ''}
+      ${post.keywords?.join(' ').toLowerCase() || ''}
       ${content?.toLowerCase() || ''}
     `
 
