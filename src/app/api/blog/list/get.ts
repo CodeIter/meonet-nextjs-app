@@ -1,5 +1,5 @@
 
-import { NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
 import {
   type BlogPostMeta,
@@ -7,7 +7,7 @@ import {
   getAllBlogPosts
 } from '@/lib/blog'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
 
   const { searchParams } = request.nextUrl
 
