@@ -33,7 +33,7 @@ export async function GET(
   const posts: BlogPostMeta[] = await getAllBlogPosts(paginationParams)
 
   const filtered = posts.filter( (post: BlogPostMeta) => {
-    const postKeywords = post.keywords.map(t => t.toLowerCase()) || []
+    const postKeywords = post.keywords?.map(t => t.toLowerCase()) ?? []
     return keywordList.some(k => postKeywords.includes(k) )
   })
 
