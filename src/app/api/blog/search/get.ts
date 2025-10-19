@@ -68,7 +68,9 @@ export async function GET(request: NextRequest) {
 
   for (const post of posts) {
 
-    const postWithContent: BlogPost = await getBlogPostBySlug(post.slug)
+    const postWithContent: BlogPost | null = await getBlogPostBySlug(post.slug)
+
+    if (!postWithContent) continue
 
     const { content } = postWithContent
 
