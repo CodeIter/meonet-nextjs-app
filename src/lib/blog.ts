@@ -17,9 +17,9 @@ import rehypeSanitize, {
   defaultSchema as rehypeSanitizeDefaultSchema
 } from "rehype-sanitize"
 
-import remarkPlugins from "@/remark-plugins"
-import remarkMdxPlugins from "@/remarkmdx-plugins"
-import rehypePlugins from "@/rehype-plugins"
+import remarkPlugins from "#/remark-plugins"
+import remarkMdxPlugins from "#/remarkmdx-plugins"
+import rehypePlugins from "#/rehype-plugins"
 
 // Use typeof to get the type of rehypeSanitizeDefaultSchema
 type rehypeSanitizeDefaultSchemaType = typeof rehypeSanitizeDefaultSchema
