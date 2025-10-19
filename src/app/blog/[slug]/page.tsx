@@ -88,7 +88,7 @@ export default function BlogPostPage({ params }: Props) {
         </div>
 
         {/* Keywords */}
-        {post.keywords?.length > 0 && (
+        {(post.keywords ?? []).length > 0 && (
           <div className="mt-4 flex flex-wrap gap-2">
             {post.keywords.map((tag) => (
               <span
