@@ -14,6 +14,8 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
 
   const created = new Date(post.createdAt).toLocaleDateString()
   const updated = new Date(post.updatedAt).toLocaleDateString()
+  const createdIso = new Date(post.createdAt).toISOString()
+  const updatedIso = new Date(post.updatedAt).toISOString()
 
   return (
     <article
@@ -57,8 +59,8 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
           </div>
 
           <div className="mt-2 flex flex-wrap text-xs text-gray-500 dark:text-gray-400 gap-4">
-            <time dateTime={post.createdAt}>Created: {created}</time>
-            <time dateTime={post.updatedAt}>Updated: {updated}</time>
+            <time dateTime={createdIso}>Created: {created}</time>
+            <time dateTime={updatedIso}>Updated: {updated}</time>
           </div>
 
           <p className="mt-3 text-gray-700 dark:text-gray-300 line-clamp-3">
