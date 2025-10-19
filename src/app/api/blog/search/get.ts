@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
   const { searchParams } = new URL(request.url)
 
-  const query: string = searchParams.get('q')?.toLowerCase()
+  const query: string = searchParams.get('q')?.toLowerCase() ?? ''
 
   if (!query) {
     return NextResponse.json({
