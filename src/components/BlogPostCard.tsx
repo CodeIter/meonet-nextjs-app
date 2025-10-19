@@ -67,9 +67,9 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
             {post.excerpt}
           </p>
 
-          {post.keywords.length > 0 && (
+          {(post.keywords ?? []).length > 0 && (
             <ul className="mt-4 flex flex-wrap gap-2">
-              {post.keywords.map((tag) => (
+              {(post.keywords ?? []).map((tag) => (
                 <li key={tag}>
                   <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                     #{tag}
