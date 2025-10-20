@@ -20,25 +20,6 @@ type NavItem = {
   available?: boolean
 }
 
-/**
- * Normalizes input to an array, applies a default values
- * if it’s missing, and returns the new array.
- */
-function normalizeNavItems(itemOrItems: NavItem | NavItem[]): NavItem[] {
-  const items = Array.isArray(itemOrItems) ? itemOrItems : [itemOrItems]
-  return items.map(item => {
-    const {
-      available = true,  // default
-      ...rest
-    } = item
-    // Return a brand-new object (immutable) with available guaranteed
-    return {
-      ...rest,
-      available,
-    }
-  })
-}
-
 export default function Navigation() {
 
   const [isStorageAvailable, setIsStorageAvailable] = useState(true)
@@ -84,8 +65,6 @@ export default function Navigation() {
       available: isStorageAvailable
     }
   ]
-
-  navItems = normalizeNavItems(navItems)
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/'
