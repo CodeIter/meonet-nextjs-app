@@ -371,7 +371,7 @@ export const getBlogPostMeta = async (filename: string): Promise<BlogPostMeta> =
 
   // If the filename has a date-time prefix, extract the actual slug
   if (match) {
-    slug = match[3]
+    slug = match[3] ?? filenameWithoutExt
   }
 
   // Determine the format based on the extension
