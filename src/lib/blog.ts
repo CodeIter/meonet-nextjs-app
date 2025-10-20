@@ -256,7 +256,7 @@ export const getBlogPostBySlug = async (
       if (noContent) {
         return {
           ...post,
-          content: undefined
+          content: ""
         }
       }
 
