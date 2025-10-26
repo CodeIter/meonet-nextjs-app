@@ -1,8 +1,21 @@
 
 import Link from 'next/link'
 import { LinkIcon, FileTextIcon, ShieldIcon, ZapIcon } from 'lucide-react'
+import { type BlogPostMeta, getAllBlogPosts } from '@/lib/blog'
+import { BlogPostList } from '@/components/BlogPostList'
 
-export default function HomePage() {
+async function getRecentPosts() {
+  try {
+    const posts = await getAllBlogPosts({ page: 1, limit: 5 });
+    return { posts, error: null };
+  } catch (error) {
+    console.error('An unexpected error occurred:', error);
+    return { posts: [], error: 'An unexpected error occurred.' };
+  }
+}
+
+export default async function HomePage() {
+  const { posts, error } = await getRecentPosts();
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -33,6 +46,32 @@ export default function HomePage() {
               Create Paste
             </Link>
           </div>
+        </div>
+
+        {/* Recent Blog Posts */}
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-center mb-8">Recent Blog Posts</h2>
+          {error ? (
+            <p className="text-center text-red-500 dark:text-red-400">
+              {error}
+            </p>
+          ) : posts.length > 0 ? (
+            <>
+              <BlogPostList posts={posts} />
+              <div className="mt-8 flex justify-center">
+                <Link
+                  href="/blog"
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-semibold transition-colors"
+                >
+                  View More
+                </Link>
+              </div>
+            </>
+          ) : (
+            <p className="text-center text-gray-500 dark:text-gray-400">
+              No blog posts available yet.
+            </p>
+          )}
         </div>
 
         {/* Features Grid */}
@@ -96,4 +135,3 @@ export default function HomePage() {
     </main>
   )
 }
-
