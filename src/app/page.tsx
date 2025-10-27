@@ -29,22 +29,6 @@ export default async function HomePage() {
           <h1 className="text-6xl font-bold text-gray-900 mb-6">
             Meonet
           </h1>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/shorten"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2"
-            >
-              <LinkIcon className="w-5 h-5" />
-              Shorten URL
-            </Link>
-            <Link
-              href="/paste"
-              className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2"
-            >
-              <FileTextIcon className="w-5 h-5" />
-              Create Paste
-            </Link>
-          </div>
         </div>
 
         {/* Recent Blog Posts */}
