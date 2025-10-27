@@ -82,7 +82,7 @@ export default function Navigation() {
             <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">WA</span>
             </div>
-            Web App
+            Meonet
           </Link>
 
           {/* Desktop Navigation */}
