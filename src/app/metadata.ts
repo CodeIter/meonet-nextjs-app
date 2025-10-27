@@ -11,8 +11,8 @@ export const authorUrl = packageJson.author.url || packageJson.homepage
 // Extract Git repo URL and username from package.json
 export const repoUrl = packageJson.repository?.url || ''
 
-export const APP_NAME = "Web App"
-export const APP_DEFAULT_TITLE = "PWA Web App"
+export const APP_NAME = "Meonet Web App"
+export const APP_DEFAULT_TITLE = "Meonet Web App"
 export const APP_TITLE_TEMPLATE = `%s - ${APP_NAME}`
 export const APP_DESCRIPTION = packageJson.description
 

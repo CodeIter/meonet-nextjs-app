@@ -1,9 +1,9 @@
 {
-  "name": "web-app",
-  "version": "2.1.1",
+  "name": "meonet-nextjs-app",
+  "version": "3.1.1",
   "license": "MIT",
   "private": true,
-  "description": "Next.js web app",
+  "description": "Next.js web app, blog, url shortener and pastebin",
   "keywords": [
     "nextjs",
     "vercel",
@@ -17,7 +17,8 @@
     "frontend",
     "pwa",
     "url-shortener",
-    "pastebin"
+    "pastebin",
+    "supabase"
   ],
   "author": {
     "name": "Muhammad Amin Boubaker",

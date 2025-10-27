@@ -1,12 +1,13 @@
 
 import type { MetadataRoute } from 'next'
 
+import { APP_NAME } from '@/app/metadata'
 import packageJson from '#/package.json'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
 
-    name: 'Web App',
+    name: APP_NAME,
     short_name: packageJson.name,
     description: packageJson.description,
 
