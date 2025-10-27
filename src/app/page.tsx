@@ -1,8 +1,7 @@
 
 import Link from 'next/link'
-import { LinkIcon, FileTextIcon, ShieldIcon, ZapIcon } from 'lucide-react'
+import { LinkIcon, ShieldIcon, ZapIcon } from 'lucide-react'
 
-//import { type BlogPostMeta } from '@/lib/blog'
 import { getAllBlogPosts } from '@/lib/blog'
 
 import { BlogPostList } from '@/components/BlogPostList'
