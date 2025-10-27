@@ -27,12 +27,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/CodeIter/meonet.git"
+    "url": "https://github.com/CodeIter/meonet-nextjs-app.git"
   },
   "bugs": {
-    "url": "https://gitlab.com/CodeIter/meonet/issues"
+    "url": "https://github.com/CodeIter/meonet-nextjs-app.git/issues"
   },
-  "homepage": "https://gitlab.com/CodeIter/meonet#readme",
+  "homepage": "https://github.com/CodeIter/meonet-nextjs-app.git#readme",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
