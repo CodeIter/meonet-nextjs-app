@@ -1,13 +1,15 @@
 ---
-title: Getting Started with Go: A Hands-On Introduction
+title: "Getting Started with Go: A Hands-On Introduction"
 author: CodeIter
 license: CC BY-SA 4.0
-excerpt: Learn the fundamentals of Go programming with clear explanations and practical examples.
+excerpt: "Learn the fundamentals of Go programming with clear explanations and practical examples."
 keywords:
   - Go
   - Golang
   - programming
   - tutorial
+createdAt: "2024-10-27T10:00:00.000Z"
+updatedAt: "2024-10-27T10:00:00.000Z"
 ---
 
 # Why Choose Go?
