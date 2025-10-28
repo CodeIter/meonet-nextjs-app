@@ -394,8 +394,8 @@ export const getBlogPostMeta = async (filename: string): Promise<BlogPostMeta> =
     createdAt: stats.birthtime ?? stats.mtime,
     updatedAt: stats.mtime,
     format,
-    filename, // Store the actual filename
-  
+    filename // Store the actual filename
+  }
 
   // Read the file content
   const fileContent = await fs.readFile(filePath, "utf-8")
