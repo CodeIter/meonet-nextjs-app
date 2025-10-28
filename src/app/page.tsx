@@ -39,14 +39,16 @@ export default async function HomePage() {
             </p>
           ) : posts.length > 0 ? (
             <>
-              <BlogPostList posts={posts} />
-              <div className="mt-8 flex justify-center">
-                <Link
-                  href="/blog"
-                  className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-semibold transition-colors"
-                >
-                  View More
-                </Link>
+              <div className="flex flex-col items-center">
+                <BlogPostList posts={posts} />
+                <div className="mt-8 flex justify-center">
+                  <Link
+                    href="/blog"
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-semibold transition-colors"
+                  >
+                    View More
+                  </Link>
+                </div>
               </div>
             </>
           ) : (
