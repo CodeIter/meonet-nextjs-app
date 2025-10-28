@@ -179,7 +179,7 @@ export const getAllBlogPosts = async (pagination?: PaginationParams): Promise<Bl
     const blogPostsPromises = files
       .filter((file) => {
         const ext = path.extname(file).toLowerCase()
-        return SUPPORTED_EXTENSIONS.includes(ext) && !file.endsWith(".frontmatter")
+        return SUPPORTED_EXTENSIONS.includes(ext)
       })
       .map((file) => getBlogPostMeta(file))
 
@@ -395,7 +395,7 @@ export const getBlogPostMeta = async (filename: string): Promise<BlogPostMeta> =
     updatedAt: stats.mtime,
     format,
     filename, // Store the actual filename
-  }
+  
 
   // Read the file content
   const fileContent = await fs.readFile(filePath, "utf-8")
@@ -418,39 +418,6 @@ export const getBlogPostMeta = async (filename: string): Promise<BlogPostMeta> =
       ...matterResult.data,
       excerpt: matterResult.data.excerpt || extractExcerpt(matterResult.content),
     }
-    /*
-     * XXX old code, to remove
-    // For HTML and text, check for a separate frontmatter file
-    const frontmatterPath = `${filePath}.frontmatter`
-    try {
-      const frontmatterExists = await fs
-        .access(frontmatterPath)
-        .then(() => true)
-        .catch(() => false)
-
-      if (frontmatterExists) {
-        const frontmatterContent = await fs.readFile(frontmatterPath, "utf-8")
-        const matterResult = matter(frontmatterContent)
-        meta = {
-          ...meta,
-          ...matterResult.data,
-        }
-      }
-      // If no excerpt in frontmatter, extract from content
-      if (!meta.excerpt) {
-        meta.excerpt = extractExcerpt(fileContent)
-      }
-      // For HTML, try to extract title from H1 tag if not in frontmatter
-      if (format === "html" && meta.title === slug) {
-        const h1Match = fileContent.match(/<h1[^>]*>(.*?)<\/h1>/i)
-        if (h1Match && h1Match[1]) {
-          meta.title = h1Match[1].trim()
-        }
-      }
-    } catch (error) {
-      console.error(`Error processing frontmatter for ${filename}:`, error)
-    }
-    */
   }
 
   return meta as BlogPostMeta
