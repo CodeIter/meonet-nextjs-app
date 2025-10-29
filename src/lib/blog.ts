@@ -186,8 +186,10 @@ export const getAllBlogPosts = async (pagination?: PaginationParams): Promise<Bl
     // Wait for all promises to resolve
     const allBlogPosts = await Promise.all(blogPostsPromises)
 
-    // Sort by createdAt date (newest first)
-    const sortedPosts = allBlogPosts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    // Defensive sort by createdAt (newest first) using Date coercion to avoid mixed types
+    const sortedPosts = allBlogPosts.sort((a, b) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
 
     // Apply pagination if provided
     if (pagination) {
@@ -352,6 +354,27 @@ export function generateSlugFromTitle(title: string): string {
     .replace(/-+/g, '-');
 }
 
+// Helper to coerce a value (string | Date | undefined) -> valid Date
+function coerceToDate(value: unknown, fallback: Date): Date {
+  if (!value) return fallback;
+  // If it's already a Date instance and valid
+  if (value instanceof Date && !isNaN(value.getTime())) {
+    return value;
+  }
+  // If it's a number (timestamp)
+  if (typeof value === 'number' && !isNaN(value)) {
+    const d = new Date(value);
+    if (!isNaN(d.getTime())) return d;
+  }
+  // If it's a string, try parsing
+  if (typeof value === 'string') {
+    const d = new Date(value);
+    if (!isNaN(d.getTime())) return d;
+  }
+  // Fallback to provided fallback Date
+  return fallback;
+}
+
 // Function to get blog post metadata from a file
 export const getBlogPostMeta = async (filename: string): Promise<BlogPostMeta> => {
   const filePath = path.join(BLOG_DIRECTORY, filename)
@@ -397,28 +420,26 @@ export const getBlogPostMeta = async (filename: string): Promise<BlogPostMeta> =
     filename // Store the actual filename
   }
 
-  // Read the file content
+  // Read the file content and parse frontmatter
   const fileContent = await fs.readFile(filePath, "utf-8")
+  const matterResult = matter(fileContent)
 
-  // Parse frontmatter based on the format
-  if (format === "markdown" || format === "mdx") {
-    // For Markdown, use gray-matter to parse frontmatter
-    const matterResult = matter(fileContent)
-    meta = {
-      ...meta,
-      ...matterResult.data,
-      excerpt: matterResult.data.excerpt || extractExcerpt(matterResult.content),
-    }
-  } else {
-
-    // For HTML and text, use gray-matter to parse frontmatter
-    const matterResult = matter(fileContent)
-    meta = {
-      ...meta,
-      ...matterResult.data,
-      excerpt: matterResult.data.excerpt || extractExcerpt(matterResult.content),
-    }
+  // Merge frontmatter but DO NOT blindly trust createdAt/updatedAt types
+  meta = {
+    ...meta,
+    ...matterResult.data,
+    excerpt: matterResult.data?.excerpt || extractExcerpt(matterResult.content)
   }
+
+  // Ensure createdAt and updatedAt are Date objects.
+  // If frontmatter provided strings (or invalid values), coerce to Date;
+  // otherwise fallback to file stats.
+  const fallbackCreated = (stats.birthtime && !isNaN(stats.birthtime.getTime())) ? stats.birthtime : stats.mtime
+  const fallbackUpdated = stats.mtime
+
+  // Use the helper to coerce or fallback
+  (meta as any).createdAt = coerceToDate((meta as any).createdAt, fallbackCreated)
+  (meta as any).updatedAt = coerceToDate((meta as any).updatedAt, fallbackUpdated)
 
   return meta as BlogPostMeta
 }
