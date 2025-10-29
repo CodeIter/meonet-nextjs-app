@@ -438,8 +438,8 @@ export const getBlogPostMeta = async (filename: string): Promise<BlogPostMeta> =
   const fallbackUpdated = stats.mtime
 
   // Use the helper to coerce or fallback
-  (meta as any).createdAt = coerceToDate((meta as any).createdAt, fallbackCreated)
-  (meta as any).updatedAt = coerceToDate((meta as any).updatedAt, fallbackUpdated)
+  meta.createdAt = coerceToDate(meta.createdAt, fallbackCreated)
+  meta.updatedAt = coerceToDate(meta.updatedAt, fallbackUpdated)
 
   return meta as BlogPostMeta
 }
