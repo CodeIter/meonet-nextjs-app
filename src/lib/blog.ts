@@ -342,7 +342,7 @@ export function generateTitleFromSlug(slug: string): string {
   return slug
     .split(/[-_]+/)
     .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-    .join(' ');
+    .join(' ')
 }
 
 export function generateSlugFromTitle(title: string): string {
@@ -351,28 +351,28 @@ export function generateSlugFromTitle(title: string): string {
     .toLowerCase()
     .replace(/[^\w\s-]/g, '')
     .replace(/[\s_]+/g, '-')
-    .replace(/-+/g, '-');
+    .replace(/-+/g, '-')
 }
 
 // Helper to coerce a value (string | Date | undefined) -> valid Date
 function coerceToDate(value: unknown, fallback: Date): Date {
-  if (!value) return fallback;
+  if (!value) return fallback
   // If it's already a Date instance and valid
   if (value instanceof Date && !isNaN(value.getTime())) {
-    return value;
+    return value
   }
   // If it's a number (timestamp)
   if (typeof value === 'number' && !isNaN(value)) {
-    const d = new Date(value);
-    if (!isNaN(d.getTime())) return d;
+    const d = new Date(value)
+    if (!isNaN(d.getTime())) return d
   }
   // If it's a string, try parsing
   if (typeof value === 'string') {
-    const d = new Date(value);
-    if (!isNaN(d.getTime())) return d;
+    const d = new Date(value)
+    if (!isNaN(d.getTime())) return d
   }
   // Fallback to provided fallback Date
-  return fallback;
+  return fallback
 }
 
 // Function to get blog post metadata from a file
@@ -386,15 +386,33 @@ export const getBlogPostMeta = async (filename: string): Promise<BlogPostMeta> =
   // Parse the filename to extract the slug
   // Check if the filename has a date-time prefix (YYYY-MM-DD-HHMMSS-*)
   const filenameWithoutExt = path.basename(filename, extension)
-  const dateTimeRegex = /^(\d{4}-\d{2}-\d{2}(-\d{1,6})?)-(.+)$/
+  const dateTimeRegex = /^(\d{4}-\d{1,2}-\d{1,2}(-\d{1,6})?)-(.+)$/
   const match = filenameWithoutExt.match(dateTimeRegex)
 
   // Default slug is the filename without extension
   let slug = filenameWithoutExt
 
+  // date time from filename if available
+  let dateobj: Date | null = null
+
   // If the filename has a date-time prefix, extract the actual slug
   if (match) {
     slug = match[3] ?? filenameWithoutExt
+    const datePart = match[1] // e.g. "2025-10-30-123456" or "2025-10-30"
+    const parts = datePart.split("-")
+    // parts = ["2025","10","30"] or ["2025","10","30","123456"]
+    const y = parts[0]
+    const mm = parts[1].padStart(2, "0")
+    const d = parts[2].padStart(2, "0")
+    let iso = `${y}-${mm}-${d}T00:00:00Z`
+    if (parts.length > 3) {
+      const hhmmss = parts[3].padStart(6, "0") // ensure at least HHMMSS
+      const hh = hhmmss.slice(0, 2)
+      const min = hhmmss.slice(2, 4)
+      const ss = hhmmss.slice(4, 6)
+      iso = `${y}-${mm}-${d}T${hh}:${min}:${ss}Z` // UTC
+    }
+    dateobj = new Date(iso)
   }
 
   // Determine the format based on the extension
@@ -414,8 +432,8 @@ export const getBlogPostMeta = async (filename: string): Promise<BlogPostMeta> =
     slug,
     title: generateTitleFromSlug(slug),
     excerpt: "",
-    createdAt: stats.birthtime ?? stats.mtime,
-    updatedAt: stats.mtime,
+    createdAt: dateobj ?? stats.birthtime ?? stats.mtime,
+    updatedAt: dateobj ?? stats.mtime,
     format,
     filename // Store the actual filename
   }
@@ -431,10 +449,15 @@ export const getBlogPostMeta = async (filename: string): Promise<BlogPostMeta> =
     excerpt: matterResult.data?.excerpt || extractExcerpt(matterResult.content)
   }
 
+  // choose safe fallback created date: prefer birthtime only if it's a sane
+  // non-zero timestamp
+  const birthtimeValid = stats.birthtime instanceof Date &&
+    !Number.isNaN(stats.birthtime.getTime()) && stats.birthtime.getTime() > 0
+
   // Ensure createdAt and updatedAt are Date objects.
   // If frontmatter provided strings (or invalid values), coerce to Date;
   // otherwise fallback to file stats.
-  const fallbackCreated = (stats.birthtime && !isNaN(stats.birthtime.getTime())) ? stats.birthtime : stats.mtime
+  const fallbackCreated = birthtimeValid ? stats.birthtime : stats.mtime
   const fallbackUpdated = stats.mtime
 
   // Use the helper to coerce or fallback
