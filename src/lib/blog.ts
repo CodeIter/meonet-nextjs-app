@@ -401,18 +401,20 @@ export const getBlogPostMeta = async (filename: string): Promise<BlogPostMeta> =
     const datePart = match[1] ?? "" // e.g. "2025-10-30-123456" or "2025-10-30"
     const parts = datePart.split("-") ?? []
     // parts = ["2025","10","30"] or ["2025","10","30","123456"]
-    const y = parts[0]
-    const mm = parts[1].padStart(2, "0")
-    const d = parts[2].padStart(2, "0")
-    let iso = `${y}-${mm}-${d}T00:00:00Z`
-    if (parts.length > 3) {
-      const hhmmss = parts[3].padStart(6, "0") // ensure at least HHMMSS
-      const hh = hhmmss.slice(0, 2)
-      const min = hhmmss.slice(2, 4)
-      const ss = hhmmss.slice(4, 6)
-      iso = `${y}-${mm}-${d}T${hh}:${min}:${ss}Z` // UTC
+    if (parts.length >= 3) {
+      const y = parts[0]
+      const mm = parts[1].padStart(2, "0")
+      const d = parts[2].padStart(2, "0")
+      let iso = `${y}-${mm}-${d}T00:00:00Z`
+      if (parts.length > 3) {
+        const hhmmss = parts[3].padStart(6, "0") // ensure at least HHMMSS
+        const hh = hhmmss.slice(0, 2)
+        const min = hhmmss.slice(2, 4)
+        const ss = hhmmss.slice(4, 6)
+        iso = `${y}-${mm}-${d}T${hh}:${min}:${ss}Z` // UTC
+      }
+      dateobj = new Date(iso)
     }
-    dateobj = new Date(iso)
   }
 
   // Determine the format based on the extension
