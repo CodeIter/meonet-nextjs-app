@@ -398,8 +398,8 @@ export const getBlogPostMeta = async (filename: string): Promise<BlogPostMeta> =
   // If the filename has a date-time prefix, extract the actual slug
   if (match) {
     slug = match[3] ?? filenameWithoutExt
-    const datePart = match[1] // e.g. "2025-10-30-123456" or "2025-10-30"
-    const parts = datePart.split("-")
+    const datePart = match[1] ?? "" // e.g. "2025-10-30-123456" or "2025-10-30"
+    const parts = datePart.split("-") ?? []
     // parts = ["2025","10","30"] or ["2025","10","30","123456"]
     const y = parts[0]
     const mm = parts[1].padStart(2, "0")
