@@ -406,10 +406,16 @@ export const getBlogPostMeta = async (filename: string): Promise<BlogPostMeta> =
     const d = (parts[2] ?? "1").padStart(2, "0")
     let iso = `${y}-${mm}-${d}T00:00:00Z`
     if (parts.length > 3) {
-      const hhmmss = (parts[3] ?? "0").padStart(6, "0") // ensure at least HHMMSS
-      const hh = hhmmss.slice(0, 2)
-      const min = hhmmss.slice(2, 4)
-      const ss = hhmmss.slice(4, 6)
+      const hhmmss = (parts[3] ?? "0").padEnd(6, "0") // ensure at least HHMMSS
+      let hh = hhmmss.slice(0, 2)
+      let min = hhmmss.slice(2, 4)
+      let ss = hhmmss.slice(4, 6)
+      const hour = Number(hh) || 0
+      const minute = Number(min) || 0
+      const second = Number(ss) || 0
+      hh = (hour >= 0 && hour <= 23) ? hh : "00"
+      min = (minute >= 0 && minute <= 59) ? min : "00"
+      ss = (second >= 0 && second <= 59) ? ss : "00"
       iso = `${y}-${mm}-${d}T${hh}:${min}:${ss}Z` // UTC
     }
     dateobj = new Date(iso)
