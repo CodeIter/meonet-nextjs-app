@@ -1,5 +1,5 @@
 ---
-title: Homemade Ice Cream: A Delicious Journey from Scratch
+title: "Homemade Ice Cream: A Delicious Journey from Scratch"
 author: CodeIter
 license: CC BY-SA 4.0
 excerpt: Discover how to make creamy, flavorful homemade ice cream with simple ingredients and no special equipment. Learn the science, techniques, and tips for crafting the perfect frozen treat at home.
