@@ -1,4 +1,4 @@
-# Web App
+# Meonet Web App
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/Node.js-v22%20v24-brightgreen)](https://nodejs.org/)
@@ -8,48 +8,59 @@
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
 
-This web application is a powerful, modern solution combining URL shortening
-and secure text sharing in one intuitive platform. Built using cutting-edge
-technologies like **Next.js**, **TypeScript**, **Tailwind CSS**, and
-**Supabase**, it offers seamless performance, robust security, and offline
-support via service workers.
+This web application is a versatile platform combining a personal blog, URL
+shortening, and secure text sharing (pastebin) in one intuitive system. Built
+using cutting-edge technologies like **Next.js**, **TypeScript**, **Tailwind
+CSS**, **MDX for content rendering**, and **Supabase for storage**, it offers
+seamless performance, robust security, beautiful markdown rendering, and
+offline support via service workers.
 
 ## Key Features
 
-- 📎 **URL Shortening**: Create compact links with analytics tracking.
+- 📝 **Personal Blog**: Create and browse blog posts with MDX support for rich
+  content, including syntax highlighting, frontmatter, and RSS/Atom feeds.
+  Search by slug, date, keywords, or content.
 
-- 🔐 **Secure Text Sharing**: Share sensitive information with client-side
-or server-side encryption.
+- 📎 **URL Shortening**: Generate compact, trackable short links with hit
+  counting and recent activity tracking.
 
-- 🌐 **Syntax Highlighting**: Supports code pastes with syntax
-highlighting for popular programming languages.
+- 🔐 **Secure Text Sharing (Pastebin)**: Share text or code snippets securely
+  with options for no encryption, client-side, or server-side encryption using
+  AES-256-GCM/CBC and bcrypt. Includes password protection, syntax
+  highlighting, keyword tagging, and IP tracking.
 
-- 🏷️ **Keyword Tagging**: Easily organize your pastes using keyword tags.
+- 🌐 **Syntax Highlighting**: Automatic code highlighting for various
+  programming languages in blog posts.
 
-- 📦 **Offline Support**: Works even when you're offline thanks to
-Service Worker caching.
+- 📦 **Offline Support**: Progressive Web App (PWA) capabilities with service
+  workers for caching and offline access.
 
-- 📱 **Responsive Design**: Fully mobile-friendly and optimized for all
-screen sizes.
+- 📱 **Responsive Design**: Fully mobile-friendly interface optimized for all
+  devices using Tailwind CSS.
 
-- 🧪 **GitHub & Markdown Integration**: Render markdown beautifully and
-integrate with GitHub-flavored content.
+- 🧪 **GitHub & Markdown Integration**: Beautiful rendering of GitHub-flavored
+  Markdown (GFM), emojis, and more with unified processing pipeline
+  (remark/rehype plugins).
 
-- ⚙️ **Middleware & Custom Headers**: Enhanced routing, logging, and header
-customization support.
+- ⚙️ **Middleware & API Routes**: Custom middleware for headers, logging, and
+  routing. Robust API endpoints for blog stats, paste management, URL
+  shortening, IP detection, and placeholder image generation.
 
-- 🔄 **LocalStorage Sync**: Recent URLs and pastes are persisted locally
-and synchronized with the server.
+- 🔄 **LocalStorage Sync**: Persist recent URLs and pastes locally with server
+  synchronization.
 
-- 🌃 **PWA Ready**: Installable as a Progressive Web App with custom
-icons and metadata.
+- 🌃 **PWA Ready**: Installable as a Progressive Web App with custom icons,
+  manifest, and metadata.
+
+- 🔒 **Security Features**: Row-level security in Supabase, content
+  sanitization, and encryption options.
 
 ## Getting Started
 
 1. Clone the repository and install dependencies:
 
 ```bash
-git clone --depth=1 https://github.com/your-username/meonet.git  \
+git clone --depth=1 "https://github.com/CodeIter/meonet-nextjs-app.git" \
     meonet.git \
 && cd meonet.git \
 && tree --gitignore \
