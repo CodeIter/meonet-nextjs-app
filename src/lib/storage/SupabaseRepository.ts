@@ -35,7 +35,7 @@ export type FilterCondition<T> = {
  * A generic Supabase repository class with Map-like interface, pagination,
  * and custom filters.
  */
-export class SupabaseRepository<T, K extends keyof T> {
+export class SupabaseRepository<T extends object, K extends keyof T & string> {
 
   constructor(
     protected readonly supabase: SupabaseClient,
@@ -54,7 +54,7 @@ export class SupabaseRepository<T, K extends keyof T> {
       .maybeSingle()
 
     if (error) throw error
-    return data as T
+    return data as unknown as T | null
   }
 
   /**
@@ -64,11 +64,11 @@ export class SupabaseRepository<T, K extends keyof T> {
     const payload = {
       ...value,
       [this.primaryKey]: key
-    }
+    } as Partial<T> & Pick<T, K>
 
     const { error } = await this.supabase
       .from(this.table)
-      .upsert(payload)
+      .upsert(payload as T)
 
     if (error) throw error
   }
@@ -161,7 +161,7 @@ export class SupabaseRepository<T, K extends keyof T> {
 
     if (error) throw error;
     // Explicitly cast data to T[]
-    return { data: (data as T[]) || [], total: count || 0 };
+    return { data: (data as unknown as T[]) || [], total: count || 0 };
   }
 
   /**
@@ -182,7 +182,7 @@ export class SupabaseRepository<T, K extends keyof T> {
     const { data, error } = await query;
     if (error) throw error;
     // Explicitly cast data to T[]
-    return (data as T[]) || [];
+    return (data as unknown as T[]) || [];
   }
 
   /**
