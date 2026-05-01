@@ -11,7 +11,7 @@ import {
 import { getClientIp } from "@/lib/utils"
 
 export const middleware: NextMiddleware = async (
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   request: NextRequest, event: NemoEvent
 ) => {
 

@@ -51,7 +51,7 @@ export const mergerehypeSanitizeSchema = (
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 // Use when needed
 // Extend the default schema to allow iframes with specific attributes
 export const rehypeSanitizeCustomSchema = mergerehypeSanitizeSchema(
@@ -96,7 +96,7 @@ export const removeNonPrintableChars = (text: string): string => {
   // \p{Cc}                     # then match any control character
   // /gu                        # g = global, u = unicode mode
   //
-  // eslint-disable-next-line no-control-regex
+   
   return text.replace(/\p{Cc}(?<![\u0009\u000A\u000D])/gu, '')
 }
 
@@ -325,7 +325,7 @@ export const getBlogPostBySlug = async (
 
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 /**
  * Gets the file extension for the given content format.
  * @param format - The content format.
