@@ -1,4 +1,4 @@
-import { Pluggable } from "unified"
+/** @type {import('unified').Pluggable[]} */
 
 // Import remark plugins you want to use
 
@@ -59,9 +59,9 @@ import remarkGemoji from 'remark-gemoji'
 // Import retext plugins you want to use
 // ...
 
-//import admonitionCustomTypes from './admonitionCustomTypes'
+//import admonitionCustomTypes from './admonitionCustomTypes.mjs'
 
-export const remarkPlugins: Pluggable[] = [
+export const remarkPlugins = [
 
   remarkFrontmatter,
 

@@ -1,4 +1,4 @@
-import { Pluggable } from "unified"
+/** @type {import('unified').Pluggable[]} */
 
 // Import rehype plugins you want to use
 
@@ -11,7 +11,7 @@ import rehypeSlug from 'rehype-slug'
 //import rehypeStarryNight from 'rehype-starry-night'
 import rehypeHighlight from 'rehype-highlight'
 
-export const rehypePlugins: Pluggable[] = [
+export const rehypePlugins = [
 
   rehypeUnwrapImages,
   rehypeSlug,
