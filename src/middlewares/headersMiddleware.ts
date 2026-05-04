@@ -29,19 +29,11 @@ export const middleware: NextMiddleware = async (
     }
   })
 
-  response.headers.set('X-Hello', 'Hello World')
-
   response.headers.set('X-Server-Timestamp', now)
   response.headers.set('X-Server-Date', dateString)
   response.headers.set('X-Server-ISO-Date', isoString)
 
   response.headers.set('X-Client-IP', ip)
-
-  // Set security headers
-  response.headers.set('X-Content-Type-Options', 'nosniff')
-  response.headers.set('X-Frame-Options', 'DENY')
-  response.headers.set('X-XSS-Protection', '1; mode=block')
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
 
   return response
 

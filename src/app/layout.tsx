@@ -1,4 +1,5 @@
 
+import { SerwistProvider } from "@serwist/next/react"
 import type { Viewport } from "next"
 import type { ReactNode } from "react"
 
@@ -26,7 +27,7 @@ export default function RootLayout({
   children: ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" dir="ltr">
       <body className={`${inter.className} bg-gray-50 min-h-screen flex flex-col antialiased`}>
         <Navigation />
         <div className="flex-1">
@@ -34,6 +35,9 @@ export default function RootLayout({
           {children}
         </div>
         <Footer />
+        <SerwistProvider swUrl="/sw.js" /*disable={process.env.NODE_ENV === "development"}*/ >
+          {children}
+        </SerwistProvider>
         <ServiceWorkerRegistration />
       </body>
     </html>
