@@ -35,8 +35,10 @@
   },
   "homepage": "https://github.com/CodeIter/meonet-nextjs-app.git#readme",
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
+    "dev": "concurrently -p none 'serwist build --watch' 'next dev --turbopack'",
+    "dev:once": "cross-env NODE_ENV=development serwist build && next dev --turbopack",
+    "build": "next build --turbopack && serwist build",
+    "build:webpack": "next build --webpack && serwist build",
     "start": "next start",
     "lint": "eslint ."
   },
@@ -49,7 +51,6 @@
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.2.4",
     "@rescale/nemo": "^2.2.0",
-    "@serwist/next": "^9.5.10",
     "@supabase/supabase-js": "^2.105.1",
     "bcryptjs": "^3.0.3",
     "gray-matter": "^4.0.3",
@@ -76,6 +77,8 @@
     "uuid": "^14.0.0"
   },
   "devDependencies": {
+    "@serwist/cli": "^9.5.11",
+    "@serwist/next": "^9.5.10",
     "@tailwindcss/postcss": "^4.2.4",
     "@tailwindcss/typography": "^0.5.19",
     "@types/he": "^1.2.3",
@@ -83,6 +86,8 @@
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "concurrently": "^9.2.1",
+    "esbuild": "^0.28.0",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.4",
     "postcss": "^8.5.13",
