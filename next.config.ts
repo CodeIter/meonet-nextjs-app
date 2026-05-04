@@ -1,4 +1,5 @@
 import type { NextConfig } from "next"
+import type { PluggableList } from "unified"
 
 import createMDX from '@next/mdx'
 
@@ -99,9 +100,11 @@ const withMDX = createMDX({
 
       ...remarkPlugins
 
-    ],
+    ] as PluggableList,
 
-    rehypePlugins
+    rehypePlugins: [
+      ...rehypePlugins
+    ] as PluggableList
 
   }
 
