@@ -37,7 +37,8 @@
   "scripts": {
     "dev": "concurrently -p none 'serwist build --watch' 'next dev --turbopack'",
     "dev:once": "cross-env NODE_ENV=development serwist build && next dev --turbopack",
-    "build": "next build --turbopack && serwist build",
+    "build": "next build && serwist build",
+    "build:turbopack": "next build --turbopack && serwist build",
     "build:webpack": "next build --webpack && serwist build",
     "start": "next start",
     "lint": "eslint ."
