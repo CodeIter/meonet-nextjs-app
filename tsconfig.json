@@ -1,58 +1,57 @@
 {
-
   "compilerOptions": {
-
     "target": "ES2020",
-
     "module": "esnext",
     "moduleResolution": "bundler",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "strict": true,
     "noEmit": true,
     "allowJs": true,
-
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
-
     "lib": [
-      "dom", "dom.iterable", "esnext",
+      "dom",
+      "dom.iterable",
+      "esnext",
       // Adds WebWorker and ServiceWorker types to the global.
       "webworker"
     ],
-
     "types": [
       "mdx",
       // This allows Serwist to type `window.serwist`.
       "@serwist/next/typings"
     ],
-
     "plugins": [
-      {"name": "next"}
+      {
+        "name": "next"
+      }
     ],
-
     "paths": {
-      "@/*": ["./src/*"],
-      "#/*": ["./*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "#/*": [
+        "./*"
+      ]
     },
-
     "allowImportingTsExtensions": true,
     "noUncheckedIndexedAccess": true,
     "verbatimModuleSyntax": false
-
   },
-
   "include": [
-    "next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts",
-    "src/types"
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/types",
+    ".next/dev/types/**/*.ts"
   ],
-
   "exclude": [
-    "node_modules", "public/sw.js"
+    "node_modules",
+    "public/sw.js"
   ]
-
 }
