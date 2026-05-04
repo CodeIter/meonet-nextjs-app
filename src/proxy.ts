@@ -1,4 +1,3 @@
-// src/middleware.ts
 
 import {
   type MiddlewareConfig,
@@ -8,9 +7,9 @@ import {
   createNEMO
 } from '@rescale/nemo'
 
-import loggerStartTimeMiddleware from '@/middlewares/loggerStartTimeMiddleware'
-import loggerEndTimeMiddleware from '@/middlewares/loggerEndTimeMiddleware'
-import headersMiddleware from '@/middlewares/headersMiddleware'
+import loggerStartTimeProxy from '@/proxies/loggerStartTimeProxy'
+import loggerEndTimeProxy from '@/proxies/loggerEndTimeProxy'
+import headersProxy from '@/proxies/headersProxy'
 
 // Define route-based middleware configuration
 const middlewareConfig: MiddlewareConfig = {
@@ -20,11 +19,11 @@ const middlewareConfig: MiddlewareConfig = {
 // Global middleware (runs before/after all routes)
 const globalMiddleware: GlobalMiddlewareConfig = {
   before: [
-    loggerStartTimeMiddleware,
-    headersMiddleware
+    loggerStartTimeProxy,
+    headersProxy
   ],
   after: [
-    loggerEndTimeMiddleware
+    loggerEndTimeProxy
   ]
 } satisfies GlobalMiddlewareConfig
 
@@ -38,14 +37,14 @@ const nemoConfig: NemoConfig = {
   }
 } satisfies NemoConfig
 
-// Create the composed middleware
+// Create the composed proxy
 export default createNEMO(
   middlewareConfig,
   globalMiddleware,
   nemoConfig
 )
 
-// This is Next.js-specific middleware configuration.
+// This is Next.js-specific proxy configuration.
 export const config = {
 
   matcher: [

@@ -10,7 +10,7 @@ import {
 
 import { getClientIp } from "@/lib/utils"
 
-export const middleware: NextMiddleware = async (
+export const loggerEndTimeProxy: NextMiddleware = async (
    
   request: NextRequest, event: NemoEvent
 ) => {
@@ -33,5 +33,5 @@ export const middleware: NextMiddleware = async (
 
 }
 
-export default middleware
+export default loggerEndTimeProxy
 
