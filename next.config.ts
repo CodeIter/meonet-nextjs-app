@@ -2,16 +2,14 @@ import type { NextConfig } from "next"
 
 import createMDX from '@next/mdx'
 
-import withSerwistInit from "@serwist/next"
-
 // Import remark plugins you want to use
-import remarkPlugins from "./remark-plugins"
+import remarkPlugins from "./remark-plugins.mjs"
 
 // Import remark mdx only plugins you want to use
-import remarkMdxPlugins from "./remarkmdx-plugins"
+import remarkMdxPlugins from "./remarkmdx-plugins.mjs"
 
 // Import rehype plugins you want to use
-import rehypePlugins from "./rehype-plugins"
+import rehypePlugins from "./rehype-plugins.mjs"
 
 /** @type { import('next').NextConfig } */
 const nextConfig: NextConfig = {
@@ -60,11 +58,13 @@ const nextConfig: NextConfig = {
       {
         source: '/(.*)',
         headers: [
+           { key: 'X-Hello', value: 'Hello World' },
           // Security headers
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Content-Security-Policy', value: "default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:;" }
+          { key: 'Content-Security-Policy', value: "default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:;" },
+          { key: 'X-XSS-Protection', value: '1; mode=block' }
         ],
       },
       {
@@ -107,16 +107,8 @@ const withMDX = createMDX({
 
 })
 
-const withSerwist = withSerwistInit({
-  swSrc: "src/service-worker/sw.ts",
-  swDest: "public/sw.js"
-})
-
-// Serwist outermost for correct build order
-export default withSerwist(withMDX(nextConfig))
-
 // only export the MDX-enhanced configuration
 // Merge MDX config with Next.js config
-//export default withMDX(nextConfig)
+export default withMDX(nextConfig)
 
 //export default nextConfig // Original without mdx
