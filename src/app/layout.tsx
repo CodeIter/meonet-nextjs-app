@@ -36,9 +36,7 @@ export default function RootLayout({
           {children}
         </div>
         <Footer />
-        <SerwistProviderWrapper swUrl="/sw.js" /*disable={process.env.NODE_ENV === "development"}*/ >
-          {children}
-        </SerwistProviderWrapper>
+        <SerwistProviderWrapper swUrl="/sw.js" /*disable={process.env.NODE_ENV === "development"}*/ />
       </body>
     </html>
   )
