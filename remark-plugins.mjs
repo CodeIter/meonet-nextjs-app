@@ -1,4 +1,3 @@
-/** @type {import('unified').Pluggable[]} */
 
 // Import remark plugins you want to use
 
@@ -61,6 +60,7 @@ import remarkGemoji from 'remark-gemoji'
 
 //import admonitionCustomTypes from './admonitionCustomTypes.mjs'
 
+/** @type {import('unified').PluggableList} */
 export const remarkPlugins = [
 
   remarkFrontmatter,

@@ -1,4 +1,3 @@
-/** @type {import('unified').Pluggable[]} */
 
 // Import rehype plugins you want to use
 
@@ -11,6 +10,7 @@ import rehypeSlug from 'rehype-slug'
 //import rehypeStarryNight from 'rehype-starry-night'
 import rehypeHighlight from 'rehype-highlight'
 
+/** @type {import('unified').PluggableList} */
 export const rehypePlugins = [
 
   rehypeUnwrapImages,

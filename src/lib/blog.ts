@@ -6,6 +6,7 @@ import he from 'he'
 
 import matter from "gray-matter"
 import { unified } from "unified"
+import type { PluggableList } from "unified"
 
 import remarkParse from "remark-parse"
 import remarkRehype from "remark-rehype"
@@ -274,9 +275,9 @@ export const getBlogPostBySlug = async (
         if (post.format === "markdown") {
           const processedContent = await unified()
             .use(remarkParse)
-            .use(remarkPlugins)
+            .use(remarkPlugins as PluggableList)
             .use(remarkRehype)
-            .use(rehypePlugins)
+            .use(rehypePlugins as PluggableList)
             .use(rehypeSanitize, rehypeSanitizeCustomSchema)
             .use(rehypeStringify)
             .process(matterResult.content)
@@ -285,10 +286,10 @@ export const getBlogPostBySlug = async (
           const processedContent = await unified()
             .use(remarkParse)
             .use(remarkMdx)
-            .use(remarkMdxPlugins)
-            .use(remarkPlugins)
+            .use(remarkMdxPlugins as PluggableList)
+            .use(remarkPlugins as PluggableList)
             .use(remarkRehype)
-            .use(rehypePlugins)
+            .use(rehypePlugins as PluggableList)
             .use(rehypeSanitize, rehypeSanitizeCustomSchema)
             .use(rehypeStringify)
             .process(matterResult.content)
@@ -296,7 +297,7 @@ export const getBlogPostBySlug = async (
         } else if (post.format === "html") {
           const processedContent = await unified()
             .use(rehypeParse, { fragment: true })
-            .use(rehypePlugins)
+            .use(rehypePlugins as PluggableList)
             .use(rehypeSanitize, rehypeSanitizeCustomSchema)
             .use(rehypeStringify)
             .process(matterResult.content)

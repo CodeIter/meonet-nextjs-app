@@ -1,4 +1,3 @@
-/** @type {import('unified').Pluggable[]} */
 
 // mdx plugins that you want to only use it on mdx files
 
@@ -7,6 +6,7 @@
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 
+/** @type {import('unified').PluggableList} */
 export const remarkMdxPlugins = [
 
   // This package depends on the AST output by remark-frontmatter
