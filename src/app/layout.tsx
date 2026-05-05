@@ -1,5 +1,6 @@
 
-import { SerwistProvider } from "@serwist/next/react"
+import SerwistProviderWrapper from '@/components/SerwistProviderWrapper'
+
 import type { Viewport } from "next"
 import type { ReactNode } from "react"
 
@@ -9,7 +10,7 @@ import './globals.css'
 
 import Navigation from '@/components/Navigation'
 import StorageWarning from '@/components/StorageWarning'
-import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
+
 import metadata from '@/app/metadata'
 import Footer from '@/components/Footer'
 
@@ -35,10 +36,9 @@ export default function RootLayout({
           {children}
         </div>
         <Footer />
-        <SerwistProvider swUrl="/sw.js" /*disable={process.env.NODE_ENV === "development"}*/ >
+        <SerwistProviderWrapper swUrl="/sw.js" /*disable={process.env.NODE_ENV === "development"}*/ >
           {children}
-        </SerwistProvider>
-        <ServiceWorkerRegistration />
+        </SerwistProviderWrapper>
       </body>
     </html>
   )

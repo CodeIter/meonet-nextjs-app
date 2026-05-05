@@ -34,6 +34,7 @@
     "url": "https://github.com/CodeIter/meonet-nextjs-app.git/issues"
   },
   "homepage": "https://github.com/CodeIter/meonet-nextjs-app.git#readme",
+  "type": "module",
   "scripts": {
     "dev": "concurrently -p none 'serwist build --watch' 'next dev --turbopack'",
     "dev:once": "cross-env NODE_ENV=development serwist build && next dev --turbopack",
