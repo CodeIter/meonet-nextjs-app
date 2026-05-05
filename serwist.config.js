@@ -16,5 +16,5 @@ export default serwist({
   // If you want to precache any other page that is not
   // already detected by Serwist, add them here. Otherwise,
   // delete `revision`.
-  additionalPrecacheEntries: [{ url: "/precached", revision }],
+  //additionalPrecacheEntries: [{ url: "/precached", revision }],
 });
