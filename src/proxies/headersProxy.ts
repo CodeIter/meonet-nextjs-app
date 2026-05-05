@@ -1,42 +1,25 @@
 
-import {
-  type NextRequest,
-  NextResponse
-} from "next/server"
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-import {
-  type NextMiddleware,
-  type NemoEvent,
-} from '@rescale/nemo'
+import type { ProxyFn } from '@/types/proxy'
 
-import { getClientIp } from "@/lib/utils"
+import { getClientIp } from '@/lib/utils'
 
-export const headersProxy: NextMiddleware = async (
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  request: NextRequest, event: NemoEvent
-) => {
-
+export const headersProxy: ProxyFn = async (request: NextRequest, _storage) => {
   const ip = getClientIp(request)
+  const now = Date.now()
 
-  const now = Date.now().toString()
-  const dateString = new Date().toString()
-  const isoString = new Date().toISOString()
-
-  const newHeaders = new Headers(request.headers)
   const response = NextResponse.next({
-    request: {
-      headers: newHeaders
-    }
+    request: { headers: new Headers(request.headers) }
   })
 
-  response.headers.set('X-Server-Timestamp', now)
-  response.headers.set('X-Server-Date', dateString)
-  response.headers.set('X-Server-ISO-Date', isoString)
-
+  response.headers.set('X-Server-Timestamp', now.toString())
+  response.headers.set('X-Server-Date', new Date(now).toString())
+  response.headers.set('X-Server-ISO-Date', new Date(now).toISOString())
   response.headers.set('X-Client-IP', ip)
 
   return response
-
 }
 
 export default headersProxy

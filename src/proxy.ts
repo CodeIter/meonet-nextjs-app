@@ -1,58 +1,38 @@
 
-import {
-  type MiddlewareConfig,
-  type GlobalMiddlewareConfig,
-  type NemoConfig,
-  type MiddlewareMetadata,
-  createNEMO
-} from '@rescale/nemo'
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+import type { ProxyFn } from '@/types/proxy'
 
 import loggerStartTimeProxy from '@/proxies/loggerStartTimeProxy'
-import loggerEndTimeProxy from '@/proxies/loggerEndTimeProxy'
 import headersProxy from '@/proxies/headersProxy'
+import loggerEndTimeProxy from '@/proxies/loggerEndTimeProxy'
 
-// Define route-based middleware configuration
-const middlewareConfig: MiddlewareConfig = {
-  '/': []
-} satisfies MiddlewareConfig
+const proxyChain: ProxyFn[] = [
+  loggerStartTimeProxy,
+  headersProxy,
+  loggerEndTimeProxy,
+]
 
-// Global middleware (runs before/after all routes)
-const globalMiddleware: GlobalMiddlewareConfig = {
-  before: [
-    loggerStartTimeProxy,
-    headersProxy
-  ],
-  after: [
-    loggerEndTimeProxy
-  ]
-} satisfies GlobalMiddlewareConfig
+export async function proxy(request: NextRequest): Promise<NextResponse> {
+  const storage = new Map<string, unknown>()
+  let response: NextResponse = NextResponse.next()
 
-// nemo config options
-const nemoConfig: NemoConfig = {
-  debug: process.env.NODE_ENV !== 'production',
-  silent: process.env.NODE_ENV === 'production',
-  enableTiming: process.env.NODE_ENV !== 'production',
-  errorHandler: (error: Error, metadata: MiddlewareMetadata) => {
-    console.error(error, metadata)
+  for (const fn of proxyChain) {
+    const result = await fn(request, storage)
+    if (result instanceof NextResponse) {
+      response = result
+    }
   }
-} satisfies NemoConfig
 
-// Create the composed proxy
-export default createNEMO(
-  middlewareConfig,
-  globalMiddleware,
-  nemoConfig
-)
+  return response
+}
+
+export default proxy
 
 // This is Next.js-specific proxy configuration.
 export const config = {
-
-  matcher: [
-
-    // Match all routes
-    "/:path*"
-
-  ]
-
+  // Match all routes
+  matcher: ['/:path*'],
 }
 

@@ -1,32 +1,16 @@
 
-import {
-  type NextRequest,
-} from "next/server"
+import type { NextRequest } from 'next/server'
 
-import {
-  type NextMiddleware,
-  type NemoEvent
-} from '@rescale/nemo'
+import type { ProxyFn } from '@/types/proxy'
 
-import { getClientIp } from "@/lib/utils"
+import { getClientIp } from '@/lib/utils'
 
-export const loggerStartTimeProxy: NextMiddleware = async (
-   
-  request: NextRequest, event: NemoEvent
-) => {
-
+export const loggerStartTimeProxy: ProxyFn = async (request: NextRequest, storage) => {
   const startTime = Date.now()
-
-  const nowDate = new Date(startTime).toISOString()
-
-  event.storage.set<number>("startTime", startTime)
-
+  storage.set('startTime', startTime)
   const ip = getClientIp(request)
-
   const { method, url } = request
-
-  console.log(`[${nowDate}] ${ip} ${method} ${url}`)
-
+  console.log(`[${new Date(startTime).toISOString()}] ${ip} ${method} ${url}`)
 }
 
 export default loggerStartTimeProxy

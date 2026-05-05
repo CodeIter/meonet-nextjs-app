@@ -1,36 +1,21 @@
 
-import {
-  type NextRequest,
-} from "next/server"
+import type { NextRequest } from 'next/server'
 
-import {
-  type NextMiddleware,
-  type NemoEvent
-} from '@rescale/nemo'
+import type { ProxyFn } from '@/types/proxy'
 
-import { getClientIp } from "@/lib/utils"
+import { getClientIp } from '@/lib/utils'
 
-export const loggerEndTimeProxy: NextMiddleware = async (
-   
-  request: NextRequest, event: NemoEvent
-) => {
+export const loggerEndTimeProxy: ProxyFn = async (request: NextRequest, storage) => {
+  const endTime = Date.now()
+  const startTime = storage.get('startTime') as number | undefined
 
-  const endTime: number = Date.now()
-  const startTime: number = event.storage.get<number>("startTime") || 0
-
-  if(!startTime) {
-    throw new Error('loggerEndTimeMiddleware.ts should run after loggerStartTimeMiddleware.ts')
+  if (!startTime) {
+    throw new Error('loggerEndTimeProxy must run after loggerStartTimeProxy')
   }
 
-  const elapedTime = endTime - startTime
-  const nowDate = new Date(endTime).toISOString()
-
   const ip = getClientIp(request)
-
   const { method, url } = request
-
-  console.log(`[${nowDate}] ${elapedTime}ms ${ip} ${method} ${url}`)
-
+  console.log(`[${new Date(endTime).toISOString()}] ${endTime - startTime}ms ${ip} ${method} ${url}`)
 }
 
 export default loggerEndTimeProxy
