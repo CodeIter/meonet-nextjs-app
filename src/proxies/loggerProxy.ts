@@ -5,7 +5,7 @@ import type { ProxyFn } from '@/types/proxy'
 
 import { getClientIp } from '@/lib/utils'
 
-export const loggerStartTimeProxy: ProxyFn = async (request: NextRequest, storage) => {
+export const loggerProxy: ProxyFn = async (request: NextRequest, storage) => {
   const startTime = Date.now()
   storage.set('startTime', startTime)
   const ip = getClientIp(request)
@@ -13,5 +13,5 @@ export const loggerStartTimeProxy: ProxyFn = async (request: NextRequest, storag
   console.log(`[${new Date(startTime).toISOString()}] ${ip} ${method} ${url}`)
 }
 
-export default loggerStartTimeProxy
+export default loggerProxy
 

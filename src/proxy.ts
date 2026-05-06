@@ -4,14 +4,12 @@ import type { NextRequest } from 'next/server'
 
 import type { ProxyFn } from '@/types/proxy'
 
-import loggerStartTimeProxy from '@/proxies/loggerStartTimeProxy'
+import loggerProxy from '@/proxies/loggerProxy'
 import headersProxy from '@/proxies/headersProxy'
-import loggerEndTimeProxy from '@/proxies/loggerEndTimeProxy'
 
 const proxyChain: ProxyFn[] = [
-  loggerStartTimeProxy,
+  loggerProxy,
   headersProxy,
-  loggerEndTimeProxy,
 ]
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
