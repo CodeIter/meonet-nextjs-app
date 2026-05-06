@@ -17,10 +17,19 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   let response: NextResponse = NextResponse.next()
 
   for (const fn of proxyChain) {
-    const result = await fn(request, storage)
+    const result = await fn(request, response, storage)
+
     if (result instanceof NextResponse) {
+      // Proxy returned a new response (e.g. redirect/rewrite)
+      // Carry over all accumulated headers from previous proxies
+      response.headers.forEach((value, key) => {
+        if (!result.headers.has(key)) {
+          result.headers.set(key, value)
+        }
+      })
       response = result
     }
+    // If void: proxy mutated response directly, nothing to do
   }
 
   return response
