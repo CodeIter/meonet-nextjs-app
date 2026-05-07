@@ -1,5 +1,5 @@
 // @ts-check
-import { spawnSync } from "node:child_process";
+//import { spawnSync } from "node:child_process";
 import { serwist } from "@serwist/next/config";
 
 // This is optional!
