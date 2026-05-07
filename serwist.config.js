@@ -8,7 +8,7 @@ import { serwist } from "@serwist/next/config";
 // `git rev-parse HEAD` might not the most efficient way
 // of determining a revision, however. You may prefer to use
 // the hashes of every extra file you precache.
-const revision = spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf-8" }).stdout ?? crypto.randomUUID();
+//const revision = spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf-8" }).stdout ?? crypto.randomUUID();
 
 export default serwist({
   swSrc: "src/service-worker/sw.ts",
