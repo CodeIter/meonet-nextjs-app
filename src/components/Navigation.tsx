@@ -72,7 +72,7 @@ export default function Navigation() {
   }
 
   return (
-    <nav className="bg-white shadow-sm border-b sticky top-0 z-50">
+    <nav className="bg-white dark:bg-gray-800 shadow-sm border-b sticky top-0 z-50">
       <div className="container mx-auto px-4">
 
         <div className="flex justify-between items-center h-16">
