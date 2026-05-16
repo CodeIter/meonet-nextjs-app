@@ -10,6 +10,7 @@ import './globals.css'
 
 import Navigation from '@/components/Navigation'
 import StorageWarning from '@/components/StorageWarning'
+import MobileConsole from '@/components/MobileConsole'
 
 import metadata from '@/app/metadata'
 import Footer from '@/components/Footer'

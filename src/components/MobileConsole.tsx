@@ -10,7 +10,7 @@ interface MobileConsoleProps {
   devOnly?: boolean
 }
 
-export default function MobileConsole({
+export function MobileConsole({
   maxWidth = 768,
   devOnly = true,
 }: MobileConsoleProps) {
@@ -29,4 +29,6 @@ export default function MobileConsole({
 
   return null
 }
+
+export default MobileConsole
 
