@@ -10,6 +10,8 @@ interface MobileConsoleProps {
   devOnly?: boolean
 }
 
+const CDN_URL = 'https://cdn.jsdelivr.net/gh/c-kick/mobileConsole/hnl.mobileconsole.min.js'
+
 export function MobileConsole({
   maxWidth = 768,
   devOnly = true,
@@ -22,8 +24,17 @@ export function MobileConsole({
     // Only load on small screens
     if (!window.matchMedia(`(max-width: ${maxWidth}px)`).matches) return
 
-    import('https://cdn.jsdelivr.net/gh/c-kick/mobileConsole/hnl.mobileconsole.min.js')
-      .catch((err) => console.warn('MobileConsole failed to load:', err))
+    const script = document.createElement('script')
+    script.src = CDN_URL
+    script.type = 'module'
+    script.async = true
+    script.onerror = () => console.warn('MobileConsole failed to load')
+
+    document.head.insertBefore(script, document.head.firstChild)
+
+    return () => {
+      script.remove()
+    }
 
   }, [maxWidth, devOnly])
 
