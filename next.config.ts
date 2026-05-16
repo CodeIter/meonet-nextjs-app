@@ -70,7 +70,7 @@ const nextConfig: NextConfig = {
             value: [
               "default-src 'self'",
               "script-src 'self' 'unsafe-inline' https://disqus.com https://*.disqus.com https://cdn.jsdelivr.net",
-              "script-src-elem 'self' https://disqus.com https://*.disqus.com https://cdn.jsdelivr.net",
+              "script-src-elem 'self' 'unsafe-inline' https://disqus.com https://*.disqus.com https://cdn.jsdelivr.net",
               "connect-src 'self' https://disqus.com https://*.disqus.com https://cdn.jsdelivr.net",
               "frame-src 'self' https://disqus.com https://*.disqus.com",
               "img-src 'self' data: https://disqus.com https://*.disqus.com https://cdn.jsdelivr.net",
