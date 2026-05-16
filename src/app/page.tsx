@@ -2,6 +2,8 @@
 import Link from 'next/link'
 import { LinkIcon, ShieldIcon, ZapIcon } from 'lucide-react'
 
+import DisqusComments from '@/components/DisqusComments'
+
 import { getAllBlogPosts } from '@/lib/blog'
 
 import { BlogPostList } from '@/components/BlogPostList'
@@ -113,6 +115,12 @@ export default async function HomePage() {
             </div>
           </div>
         </div>
+
+        <DisqusComments
+          shortname={process.env.NEXT_PUBLIC_DISQUS_SHORTNAME || "example"}
+          url={`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL || "example.com"}/`}
+          identifier="home-page"
+        />
 
       </div>
 
