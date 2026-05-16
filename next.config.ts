@@ -65,7 +65,19 @@ const nextConfig: NextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Content-Security-Policy', value: "default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:;" },
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' https://disqus.com https://*.disqus.com https://cdn.jsdelivr.net",
+              "script-src-elem 'self' https://disqus.com https://*.disqus.com https://cdn.jsdelivr.net",
+              "connect-src 'self' https://disqus.com https://*.disqus.com https://cdn.jsdelivr.net",
+              "frame-src 'self' https://disqus.com https://*.disqus.com",
+              "img-src 'self' data: https://disqus.com https://*.disqus.com https://cdn.jsdelivr.net",
+              "style-src 'self' 'unsafe-inline'",
+              "object-src 'none'",
+            ].join('; ')
+          },
           { key: 'X-XSS-Protection', value: '1; mode=block' }
         ],
       },
