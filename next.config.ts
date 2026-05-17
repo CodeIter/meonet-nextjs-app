@@ -87,7 +87,7 @@ const nextConfig: NextConfig = {
           // Service worker specific headers
           { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
           { key: 'Content-Type', value: 'application/javascript; charset=utf-8' },
-          { key: 'Content-Security-Policy', value: "default-src 'self'; script-src 'self'" }
+          // ❌ Remove the restrictive SW CSP — it can block NetworkOnly fetches
         ],
       }
     ]
