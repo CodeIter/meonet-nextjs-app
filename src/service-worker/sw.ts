@@ -3,7 +3,13 @@
 /// <reference lib="webworker" />
 import { defaultCache } from "@serwist/next/worker"
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist"
-import { Serwist } from "serwist"
+import { NetworkOnly, Serwist } from "serwist"
+
+const EXTERNAL_DOMAINS = [
+  'disqus.com',
+  'disquscdn.com',
+  'cdn.jsdelivr.net',  // mobileConsole CDN
+]
 
 // This declares the value of `injectionPoint` to TypeScript.
 // `injectionPoint` is the string that will be replaced by the
@@ -22,7 +28,23 @@ const serwist = new Serwist({
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: true,
-  runtimeCaching: defaultCache,
+
+  runtimeCaching: [
+
+    // ── Let external domains go straight to network, no caching ──
+    {
+      matcher: ({ url }) =>
+        EXTERNAL_DOMAINS.some(domain =>
+          url.hostname === domain || url.hostname.endsWith(`.${domain}`)
+        ),
+      handler: new NetworkOnly(),
+    },
+
+    // ── Default Next.js caching strategy ──
+    ...defaultCache,
+
+  ],
+
   fallbacks: {
     entries: [
       {
@@ -33,6 +55,8 @@ const serwist = new Serwist({
       },
     ],
   },
+
 })
 
 serwist.addEventListeners()
+
