@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/Node.js-v22%20v24-brightgreen)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/Package%20Manager-pnpm-blue?logo=pnpm)](https://pnpm.io/)
-[![Next.js v15](https://img.shields.io/badge/Framework%20Next.js-v15-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Next.js v16](https://img.shields.io/badge/Framework%20Next.js-v16-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![Vercel](https://img.shields.io/badge/Platform-Vercel-000000?logo=vercel)](https://vercel.com/)
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
