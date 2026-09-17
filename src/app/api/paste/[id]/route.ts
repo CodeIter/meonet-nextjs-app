@@ -1,5 +1,5 @@
 
-export { GET } from '@/app/api/paste/[id]/get.ts'
+export { GET } from '@/app/api/paste/[id]/get'
 
-export { POST } from '@/app/api/paste/[id]/post.ts'
+export { POST } from '@/app/api/paste/[id]/post'
 
