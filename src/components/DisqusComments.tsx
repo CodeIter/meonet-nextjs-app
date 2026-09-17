@@ -3,6 +3,26 @@
 
 import { useEffect } from 'react'
 
+
+/*
+Firefox Browser Uncaught Error: parseColor received unparseable color: oklch(0.210.034264.665)
+    w https://meonet-vercel-app.disqus.com/embed.js:52
+    j https://meonet-vercel-app.disqus.com/embed.js:52
+    k https://meonet-vercel-app.disqus.com/embed.js:52
+    m https://meonet-vercel-app.disqus.com/embed.js:52
+    toJSON https://meonet-vercel-app.disqus.com/embed.js:52
+    loadEmbed https://meonet-vercel-app.disqus.com/embed.js:54
+    <anonymous> https://meonet-vercel-app.disqus.com/embed.js:54
+embed.js:52:9713
+
+Chromium Browser Error:
+The FetchEvent for "https://meonet-vercel-app.disqus.com/embed.js" resulted in a network error response: the promise was rejected.
+sw.js:1 Uncaught (in promise) no-response: no-response :: [{"url":"https://meonet-vercel-app.disqus.com/embed.js","error":{}}]
+...
+page-865d2d5069f27246.js:1  GET https://meonet-vercel-app.disqus.com/embed.js net::ERR_FAILED
+
+*/
+
 interface DisqusCommentsProps {
   url: string
   identifier: string

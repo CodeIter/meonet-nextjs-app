@@ -116,6 +116,8 @@ export default async function HomePage() {
           </div>
         </div>
 
+        {/* XXX browser error here, see browser console:
+            for detail see src/components/DisqusComments.tsx */}
         <DisqusComments
           shortname={process.env.NEXT_PUBLIC_DISQUS_SHORTNAME || "example"}
           url={`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL || "example.com"}/`}
