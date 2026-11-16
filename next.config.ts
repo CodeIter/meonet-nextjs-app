@@ -74,7 +74,7 @@ const nextConfig: NextConfig = {
               "script-src-elem 'self' 'unsafe-inline' https://disqus.com https://*.disqus.com https://cdn.jsdelivr.net",
               "connect-src 'self' https://disqus.com https://*.disqus.com https://cdn.jsdelivr.net",
               "frame-src 'self' https://disqus.com https://*.disqus.com",
-              "img-src 'self' data: https://disqus.com https://*.disqus.com https://cdn.jsdelivr.net",
+              "img-src 'self' data: https://disqus.com https://*.disqus.com https://cdn.jsdelivr.net https://www.google.com",
               "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
               "object-src 'none'",
             ].join('; ')
