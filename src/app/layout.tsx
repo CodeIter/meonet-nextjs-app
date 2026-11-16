@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" dir="ltr">
       <body className={`${inter.className} bg-gray-50 dark:bg-gray-800 min-h-screen flex flex-col antialiased`}>
-        <MobileConsole devOnly={false} />
+        <MobileConsole devOnly={true} />
         <Navigation />
         <div className="flex-1">
           <StorageWarning />
