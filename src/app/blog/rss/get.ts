@@ -1,7 +1,7 @@
 
 import { NextResponse } from 'next/server'
 
-import he from 'he' // HTML entity encoder
+import { encode } from 'he' // HTML entity encoder
 
 import {
   type BlogPostMeta,
@@ -17,9 +17,9 @@ export async function GET() {
   const items = posts.map(post => {
     return `
         <item>
-          <title><![CDATA[${he.encode(post.title)}]]></title>
+          <title><![CDATA[${encode(post.title)}]]></title>
           <link>${BASE_URL}/blog/${post.slug}</link>
-          <description><![CDATA[${he.encode(post.excerpt)}]]></description>
+          <description><![CDATA[${encode(post.excerpt)}]]></description>
           <pubDate>${new Date(post.createdAt).toUTCString()}</pubDate>
           <guid>${BASE_URL}/blog/${post.slug}</guid>
         </item>

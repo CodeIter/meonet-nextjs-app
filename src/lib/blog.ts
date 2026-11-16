@@ -2,7 +2,7 @@
 import fs from "fs/promises"
 import path from "path"
 
-import he from 'he'
+import { encode } from 'he'
 
 import matter from "gray-matter"
 import { unified } from "unified"
@@ -104,7 +104,7 @@ export const removeNonPrintableChars = (text: string): string => {
 // Function to encode HTML entities
 export const encodeHtml = (text: string): string => {
   // Encode using 'he' with specified options
-  return he.encode(
+  return encode(
     // Remove non-printable characters
     removeNonPrintableChars(text), {
     useNamedReferences: true,
