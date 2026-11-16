@@ -57,7 +57,7 @@
     "@supabase/supabase-js": "^2.119.0",
     "bcryptjs": "^3.0.3",
     "gray-matter": "^4.0.3",
-    "he": "^1.2.0",
+    "he": "^2.0.0",
     "lucide-react": "^1.73.0",
     "next": "^16.4.6",
     "react": "^19.3.1",
@@ -73,7 +73,7 @@
     "remark-gfm": "^4.0.1",
     "remark-github": "^12.0.0",
     "remark-mdx": "^3.1.1",
-    "remark-mdx-frontmatter": "^5.2.0",
+    "remark-mdx-frontmatter": "^6.0.0",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
     "unified": "^11.0.5",
@@ -86,16 +86,16 @@
     "@tailwindcss/typography": "^0.5.20",
     "@types/he": "^1.2.3",
     "@types/mdx": "^2.0.14",
-    "@types/node": "^25.9.9",
+    "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "concurrently": "^9.2.5",
+    "concurrently": "^10.0.7",
     "esbuild": "^0.28.2",
-    "eslint": "^9.39.5",
+    "eslint": "^10.15.0",
     "eslint-config-next": "^16.4.6",
     "postcss": "^8.5.33",
     "serwist": "^9.5.13",
     "tailwindcss": "^4.3.5",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   }
 }
