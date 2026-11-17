@@ -51,7 +51,8 @@ export default function PasteViewPage() {
   }, [id])
 
   useEffect(() => {
-    fetchPaste()
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchPaste()
   }, [fetchPaste])
 
   const decryptContent = async () => {

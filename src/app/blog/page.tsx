@@ -1,7 +1,7 @@
 
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { type BlogPostMeta } from '@/lib/blog'
 
@@ -15,12 +15,7 @@ export default function BlogPage() {
   const [hasMore, setHasMore] = useState(true)
   const [loading, setLoading] = useState(false)
 
-  // Fetch posts whenever `page` changes
-  useEffect(() => {
-    fetchPosts(page)
-  }, [page])
-
-  async function fetchPosts(pageNum: number) {
+  const fetchPosts = useCallback(async (pageNum: number) => {
     setLoading(true)
     try {
       const res = await fetch(`/api/blog/list?page=${pageNum}&limit=10`)
@@ -35,7 +30,12 @@ export default function BlogPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchPosts(page)
+  }, [fetchPosts, page])
 
   return (
     <section className="mx-auto max-w-5xl px-4 py-8">

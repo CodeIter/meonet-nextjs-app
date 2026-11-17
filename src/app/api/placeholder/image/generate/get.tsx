@@ -2,10 +2,35 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { ImageResponse } from 'next/og'
 
+function createPlaceholderImage(
+  text: string,
+  bg: string,
+  fg: string,
+  size: number,
+) {
+  return (
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: bg,
+        color: fg,
+        fontSize: size,
+        fontWeight: 'bold',
+        fontFamily: 'Arial, sans-serif',
+        userSelect: 'none',
+      }}
+    >
+      {text}
+    </div>
+  )
+}
+
 export async function GET(request: NextRequest) {
-
   try {
-
     // Parse query parameters from the URL
     const { searchParams } = new URL(request.url)
     const width = parseInt(searchParams.get('width') || '400', 10)
@@ -24,37 +49,17 @@ export async function GET(request: NextRequest) {
 
     // Generate the image using JSX and inline styles
     return new ImageResponse(
-      (
-        <div
-          style={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: bg,
-            color: fg,
-            fontSize: size,
-            fontWeight: 'bold',
-            fontFamily: 'Arial, sans-serif',
-            userSelect: 'none',
-          }}
-        >
-          {text}
-        </div>
-      ),
+      createPlaceholderImage(text, bg, fg, size),
       {
         width,
-        height
-      }
+        height,
+      },
     )
-
   } catch (error) {
     console.error('Image generation error:', error)
     return NextResponse.json({
       error: 'Failed to generate image'
     }, { status: 500 })
   }
-
 }
 

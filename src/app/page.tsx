@@ -2,7 +2,8 @@
 import Link from 'next/link'
 import { LinkIcon, ShieldIcon, ZapIcon } from 'lucide-react'
 
-import DisqusComments from '@/components/DisqusComments'
+// XXX Disabled because of browser error here: for detail see src/components/DisqusComments.tsx
+//import DisqusComments from '@/components/DisqusComments'
 
 import { getAllBlogPosts } from '@/lib/blog'
 

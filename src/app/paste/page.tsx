@@ -26,7 +26,19 @@ export default function PastePage() {
   const [isLoading, setIsLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState('')
-  const [recentPastes, setRecentPastes] = useState<RecentPaste[]>([])
+  const [recentPastes, setRecentPastes] = useState<RecentPaste[]>(() => {
+    if (typeof window === 'undefined') {
+      return []
+    }
+
+    try {
+      const savedPastes = window.localStorage.getItem('recentPastes')
+      return savedPastes ? JSON.parse(savedPastes) : []
+    } catch (err) {
+      console.error('Failed to load recent pastes from localStorage', err)
+      return []
+    }
+  })
 
   useEffect(() => {
     const checkStorage = async () => {
@@ -40,18 +52,6 @@ export default function PastePage() {
       }
     }
     checkStorage()
-  }, [])
-
-  useEffect(() => {
-    try {
-      const savedPastes = localStorage.getItem('recentPastes')
-      if (savedPastes) {
-        setRecentPastes(JSON.parse(savedPastes))
-      }
-    } catch (err) {
-      console.error('Failed to load recent pastes from localStorage', err)
-      setError('Failed to load recent pastes')
-    }
   }, [])
 
   useEffect(() => {

@@ -18,7 +18,19 @@ export default function ShortenPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState('')
-  const [recentUrls, setRecentUrls] = useState<UrlEntry[]>([])
+  const [recentUrls, setRecentUrls] = useState<UrlEntry[]>(() => {
+    if (typeof window === 'undefined') {
+      return []
+    }
+
+    try {
+      const savedUrls = window.localStorage.getItem('recentUrls')
+      return savedUrls ? JSON.parse(savedUrls) : []
+    } catch (error) {
+      console.error('Failed to load recent URLs from localStorage', error)
+      return []
+    }
+  })
 
   useEffect(() => {
     const checkStorage = async () => {
@@ -32,19 +44,6 @@ export default function ShortenPage() {
       }
     }
     checkStorage()
-  }, [])
-
-  useEffect(() => {
-    // Load recent URLs from localStorage
-    try {
-      const savedUrls = localStorage.getItem('recentUrls')
-      if (savedUrls) {
-        setRecentUrls(JSON.parse(savedUrls))
-      }
-    } catch (error) {
-      console.error('Failed to load recent URLs from localStorage', error)
-      setError('Failed to load recent URLs')
-    }
   }, [])
 
   useEffect(() => {
