@@ -54,6 +54,7 @@
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.4.6",
+    "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.119.0",
     "bcryptjs": "^3.0.3",
     "gray-matter": "^4.0.3",
@@ -89,6 +90,7 @@
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "concurrently": "^10.0.7",
     "esbuild": "^0.28.2",
     "eslint": "^10.15.0",
@@ -96,7 +98,6 @@
     "postcss": "^8.5.33",
     "serwist": "^9.5.13",
     "tailwindcss": "^4.3.5",
-    "@typescript/native": "npm:typescript@^7.0.2",
     "typescript": "npm:@typescript/typescript6@^6.0.2"
   }
 }
