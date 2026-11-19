@@ -11,6 +11,10 @@ const EXTERNAL_DOMAINS = [
   'cdn.jsdelivr.net',  // mobileConsole CDN
 ]
 
+// Pages that depend on the login session must never be cached by the
+// service worker (a cached /protected page would outlive logout).
+const AUTH_PATHS = ['/login', '/register', '/protected', '/auth']
+
 // This declares the value of `injectionPoint` to TypeScript.
 // `injectionPoint` is the string that will be replaced by the
 // actual precache manifest. By default, this string is set to
@@ -40,6 +44,14 @@ const serwist = new Serwist({
       handler: new NetworkOnly(),
     },
 
+    // ── Auth-dependent pages: always network, never cached ──
+    {
+      matcher: ({ url, sameOrigin }) =>
+        sameOrigin &&
+        AUTH_PATHS.some(p => url.pathname === p || url.pathname.startsWith(`${p}/`)),
+      handler: new NetworkOnly(),
+    },
+
     // ── Default Next.js caching strategy ──
     ...defaultCache,
 
@@ -59,4 +71,3 @@ const serwist = new Serwist({
 })
 
 serwist.addEventListeners()
-

@@ -6,10 +6,12 @@ import type { ProxyFn } from '@/types/proxy'
 
 import loggerProxy from '@/proxies/loggerProxy'
 import headersProxy from '@/proxies/headersProxy'
+import authProxy from '@/proxies/authProxy'
 
 const proxyChain: ProxyFn[] = [
   loggerProxy,
   headersProxy,
+  authProxy, // keep last: it may return a redirect that inherits earlier headers
 ]
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
@@ -42,4 +44,3 @@ export const config = {
   // Match all routes
   matcher: ['/:path*'],
 }
-
