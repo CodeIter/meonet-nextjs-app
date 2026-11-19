@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import {
   type LucideIcon,
   HomeIcon, LinkIcon, FileTextIcon, MenuIcon, XIcon,
-  BookOpen
+  BookOpen, LogInIcon, UserPlusIcon
 } from 'lucide-react'
 
 type NavItem = {
@@ -24,6 +24,10 @@ export default function Navigation() {
 
   const [isStorageAvailable, setIsStorageAvailable] = useState(true)
   const [isOpen, setIsOpen] = useState(false)
+
+  // null = not known yet (render no auth buttons, avoids a flash for logged-in users)
+  const [showAuthButtons, setShowAuthButtons] = useState<boolean | null>(null)
+
   const pathname = usePathname()
 
   useEffect(() => {
@@ -34,6 +38,23 @@ export default function Navigation() {
       })
       .catch(() => setIsStorageAvailable(false))
   }, [])
+
+  // Re-check on every route change: this component lives in the root layout
+  // and is not remounted after login / logout (both redirect to another page).
+  useEffect(() => {
+    let cancelled = false
+
+    fetch('/api/auth/session', { cache: 'no-store' })
+      .then(res => res.json())
+      .then(data => {
+        if (!cancelled) setShowAuthButtons(Boolean(data.available) && !data.authenticated)
+      })
+      .catch(() => {
+        if (!cancelled) setShowAuthButtons(false)
+      })
+
+    return () => { cancelled = true }
+  }, [pathname])
 
   const navItems: NavItem[] = [
     {
@@ -107,6 +128,30 @@ export default function Navigation() {
                 )}
               </Link>
             ))}
+
+            {/* Auth buttons: only for logged-out users */}
+            {showAuthButtons && (
+              <div className="flex items-center gap-2 pl-4 border-l border-gray-200">
+                <Link
+                  href="/login"
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                    pathname === '/login'
+                      ? 'bg-blue-50 text-blue-600 font-medium'
+                      : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                  }`}
+                >
+                  <LogInIcon className="w-4 h-4" />
+                  Log in
+                </Link>
+                <Link
+                  href="/register"
+                  className="btn-primary flex items-center gap-2"
+                >
+                  <UserPlusIcon className="w-4 h-4" />
+                  Register
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -144,6 +189,32 @@ export default function Navigation() {
                   )}
                 </Link>
               ))}
+
+              {/* Auth buttons: only for logged-out users */}
+              {showAuthButtons && (
+                <div className="pt-2 mt-2 border-t space-y-2">
+                  <Link
+                    href="/login"
+                    onClick={() => setIsOpen(false)}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                      pathname === '/login'
+                        ? 'bg-blue-50 text-blue-600 font-medium'
+                        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                    }`}
+                  >
+                    <LogInIcon className="w-5 h-5" />
+                    Log in
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setIsOpen(false)}
+                    className="btn-primary flex items-center justify-center gap-3"
+                  >
+                    <UserPlusIcon className="w-5 h-5" />
+                    Register
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}
