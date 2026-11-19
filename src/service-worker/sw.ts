@@ -13,7 +13,7 @@ const EXTERNAL_DOMAINS = [
 
 // Pages that depend on the login session must never be cached by the
 // service worker (a cached /protected page would outlive logout).
-const AUTH_PATHS = ['/login', '/register', '/protected', '/auth', '/api/auth']
+const AUTH_PATHS = ['/login', '/register', '/protected', '/account', '/auth', '/api/auth']
 
 // This declares the value of `injectionPoint` to TypeScript.
 // `injectionPoint` is the string that will be replaced by the

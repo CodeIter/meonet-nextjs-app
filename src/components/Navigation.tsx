@@ -9,8 +9,10 @@ import { useEffect, useState } from 'react'
 import {
   type LucideIcon,
   HomeIcon, LinkIcon, FileTextIcon, MenuIcon, XIcon,
-  BookOpen, LogInIcon, UserPlusIcon
+  BookOpen, LogInIcon, UserPlusIcon, UserIcon, LogOutIcon
 } from 'lucide-react'
+
+import { logout } from '@/app/actions/auth'
 
 type NavItem = {
   href: string
@@ -20,13 +22,15 @@ type NavItem = {
   available?: boolean
 }
 
+// unknown: not checked yet (render no auth items, avoids a flash)
+// unavailable: Supabase is not configured (render no auth items)
+type AuthState = 'unknown' | 'unavailable' | 'guest' | 'user'
+
 export default function Navigation() {
 
   const [isStorageAvailable, setIsStorageAvailable] = useState(true)
   const [isOpen, setIsOpen] = useState(false)
-
-  // null = not known yet (render no auth buttons, avoids a flash for logged-in users)
-  const [showAuthButtons, setShowAuthButtons] = useState<boolean | null>(null)
+  const [authState, setAuthState] = useState<AuthState>('unknown')
 
   const pathname = usePathname()
 
@@ -47,10 +51,12 @@ export default function Navigation() {
     fetch('/api/auth/session', { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
-        if (!cancelled) setShowAuthButtons(Boolean(data.available) && !data.authenticated)
+        if (cancelled) return
+        if (!data.available) setAuthState('unavailable')
+        else setAuthState(data.authenticated ? 'user' : 'guest')
       })
       .catch(() => {
-        if (!cancelled) setShowAuthButtons(false)
+        if (!cancelled) setAuthState('unavailable')
       })
 
     return () => { cancelled = true }
@@ -92,6 +98,20 @@ export default function Navigation() {
     return pathname.startsWith(href)
   }
 
+  const desktopLink = (active: boolean) =>
+    `flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+      active
+        ? 'bg-blue-50 text-blue-600 font-medium'
+        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+    }`
+
+  const mobileLink = (active: boolean) =>
+    `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+      active
+        ? 'bg-blue-50 text-blue-600 font-medium'
+        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+    }`
+
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-sm border-b sticky top-0 z-50">
       <div className="container mx-auto px-4">
@@ -129,27 +149,33 @@ export default function Navigation() {
               </Link>
             ))}
 
-            {/* Auth buttons: only for logged-out users */}
-            {showAuthButtons && (
+            {/* Logged-out users */}
+            {authState === 'guest' && (
               <div className="flex items-center gap-2 pl-4 border-l border-gray-200">
-                <Link
-                  href="/login"
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
-                    pathname === '/login'
-                      ? 'bg-blue-50 text-blue-600 font-medium'
-                      : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
-                  }`}
-                >
+                <Link href="/login" className={desktopLink(pathname === '/login')}>
                   <LogInIcon className="w-4 h-4" />
                   Log in
                 </Link>
-                <Link
-                  href="/register"
-                  className="btn-primary flex items-center gap-2"
-                >
+                <Link href="/register" className="btn-primary flex items-center gap-2">
                   <UserPlusIcon className="w-4 h-4" />
                   Register
                 </Link>
+              </div>
+            )}
+
+            {/* Logged-in users */}
+            {authState === 'user' && (
+              <div className="flex items-center gap-2 pl-4 border-l border-gray-200">
+                <Link href="/account" className={desktopLink(isActive('/account'))}>
+                  <UserIcon className="w-4 h-4" />
+                  Account
+                </Link>
+                <form action={logout}>
+                  <button type="submit" className="btn-secondary flex items-center gap-2">
+                    <LogOutIcon className="w-4 h-4" />
+                    Log out
+                  </button>
+                </form>
               </div>
             )}
           </div>
@@ -190,17 +216,13 @@ export default function Navigation() {
                 </Link>
               ))}
 
-              {/* Auth buttons: only for logged-out users */}
-              {showAuthButtons && (
+              {/* Logged-out users */}
+              {authState === 'guest' && (
                 <div className="pt-2 mt-2 border-t space-y-2">
                   <Link
                     href="/login"
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                      pathname === '/login'
-                        ? 'bg-blue-50 text-blue-600 font-medium'
-                        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
-                    }`}
+                    className={mobileLink(pathname === '/login')}
                   >
                     <LogInIcon className="w-5 h-5" />
                     Log in
@@ -213,6 +235,26 @@ export default function Navigation() {
                     <UserPlusIcon className="w-5 h-5" />
                     Register
                   </Link>
+                </div>
+              )}
+
+              {/* Logged-in users */}
+              {authState === 'user' && (
+                <div className="pt-2 mt-2 border-t space-y-2">
+                  <Link
+                    href="/account"
+                    onClick={() => setIsOpen(false)}
+                    className={mobileLink(isActive('/account'))}
+                  >
+                    <UserIcon className="w-5 h-5" />
+                    Account
+                  </Link>
+                  <form action={logout} onSubmit={() => setIsOpen(false)}>
+                    <button type="submit" className="btn-secondary w-full flex items-center justify-center gap-3">
+                      <LogOutIcon className="w-5 h-5" />
+                      Log out
+                    </button>
+                  </form>
                 </div>
               )}
             </div>

@@ -92,3 +92,30 @@ export async function logout(): Promise<void> {
   revalidatePath('/', 'layout')
   redirect('/login')
 }
+
+export async function changePassword(
+  _prev: AuthFormState,
+  formData: FormData
+): Promise<AuthFormState> {
+  const password = String(formData.get('password') ?? '')
+  const confirm = String(formData.get('confirm') ?? '')
+
+  if (password.length < MIN_PASSWORD_LENGTH) {
+    return { error: `Password must be at least ${MIN_PASSWORD_LENGTH} characters.` }
+  }
+  if (password !== confirm) {
+    return { error: 'Passwords do not match.' }
+  }
+
+  const supabase = await createSupabaseServerClient()
+  if (!supabase) return { error: AUTH_UNAVAILABLE }
+
+  // Server actions are public endpoints: verify the session again here.
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login?next=/account')
+
+  const { error } = await supabase.auth.updateUser({ password })
+  if (error) return { error: error.message }
+
+  return { message: 'Password updated.' }
+}

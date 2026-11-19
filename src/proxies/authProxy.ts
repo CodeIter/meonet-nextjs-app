@@ -13,7 +13,7 @@ import {
 import { DEFAULT_REDIRECT, getRequestOrigin } from '@/lib/auth'
 
 // Only visible to logged-in users → redirect to /login otherwise
-const PROTECTED_PATHS = ['/protected']
+const PROTECTED_PATHS = ['/protected', '/account']
 // Only visible to guests → redirect to /protected if already logged in
 const GUEST_ONLY_PATHS = ['/login', '/register']
 
