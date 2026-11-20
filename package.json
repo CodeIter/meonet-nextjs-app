@@ -42,6 +42,7 @@
     "build": "next build --webpack && serwist build",
     "build:turbopack": "next build --turbopack && serwist build",
     "build:webpack": "next build --webpack && serwist build",
+    "postbuild": "cpx \"public/**/*\" .next/standalone/public && cpx \".next/static/**/*\" .next/standalone/.next/static",
     "start": "node .next/standalone/server.js",
     "next:start": "next start",
     "lint": "eslint ."
@@ -92,6 +93,7 @@
     "@types/react-dom": "^19.3.0",
     "@typescript/native": "npm:typescript@^7.0.2",
     "concurrently": "^10.0.7",
+    "cpx2": "^9.0.3",
     "esbuild": "^0.28.2",
     "eslint": "^10.15.0",
     "eslint-config-next": "^16.4.6",
