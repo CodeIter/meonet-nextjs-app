@@ -88,6 +88,12 @@ const nextConfig: NextConfig = {
     ]
   },
 
+  webpack: (config) => {
+    // to disable webpack warning if needed
+    //config.infrastructureLogging = { level: "error" };
+    return config;
+  },
+
   // Optionally, add any other Next.js config below
   experimental: {}
 
