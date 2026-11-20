@@ -18,16 +18,18 @@ RUN apk add --no-cache libc6-compat
 # Set working directory
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
-
 # Set environment variables for pnpm
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
+ENV PNPM_CONFIG_STORE_DIR="/pnpm/store"
 
-# Enable corepack and install configured package manager from package.json
+# Enable corepack and install the package manager declared in package.json
+COPY package.json ./
 RUN corepack enable && \
     corepack prepare --activate
+
+# Copy lockfile and pnpm config (pnpm-workspace.yaml holds pnpm settings)
+COPY pnpm-lock.yaml pnpm-workspace.yaml .npmrc* ./
 
 # Install node_modules dependencies
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
@@ -41,51 +43,39 @@ FROM base AS builder
 # Set working directory
 WORKDIR /app
 
-# Copy node_modules dependencies
-COPY --from=deps /app/node_modules ./node_modules
-
-# Copy rest of app files
-COPY . .
-
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-#ENV NEXT_TELEMETRY_DISABLED=1
-
-# Set environment variables for pnpm
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
-# Enable corepack and install configured package manager from package.json
+# Uncomment to disable Next.js telemetry during build.
+#ENV NEXT_TELEMETRY_DISABLED=1
+
+# Copy node_modules dependencies, then the rest of the app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
 RUN corepack enable && \
     corepack prepare --activate && \
-    mkdir -p /app/public # Ensure existence of public directory
+    mkdir -p /app/public
 
-# Build project
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
-    pnpm run build
+# Build project (runs postbuild too; serwist writes public/sw.js here)
+RUN pnpm run build
 
 ############################################################################
 
-# Production image, copy all the files and run next
+# Production image
 FROM base AS runner
 
 # Set working directory
 WORKDIR /app
 
-# Add system user and group for app
-RUN addgroup --system --gid 1001 nodejs \
-    &&  adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
-# Copy public directory
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
+# 1) Standalone server (traced output)
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+# 2) Static assets and public files (not included in standalone)
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-#===========================================================================
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 USER nextjs
 
@@ -102,8 +92,7 @@ ENV HOSTNAME="0.0.0.0"
 # Expose default port
 EXPOSE 3000
 
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
+# Run the web server
 ENTRYPOINT ["node", "server.js"]
 CMD []
 
