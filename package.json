@@ -36,9 +36,8 @@
   "homepage": "https://github.com/CodeIter/meonet-nextjs-app.git#readme",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -p none 'serwist build --watch' 'next dev --turbopack'",
-    "dev:webpack": "concurrently -p none 'serwist build --watch' 'next dev --webpack'",
-    "dev:once": "cross-env NODE_ENV=development serwist build && next dev --turbopack",
+    "dev": "concurrently -p none 'serwist build --watch' 'next dev --webpack'",
+    "dev:once": "cross-env NODE_ENV=development serwist build && next dev --webpack",
     "build": "next build --webpack && serwist build",
     "build:turbopack": "next build --turbopack && serwist build",
     "build:webpack": "next build --webpack && serwist build",
