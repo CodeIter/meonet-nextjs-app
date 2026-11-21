@@ -1,17 +1,7 @@
 
 import type { NextConfig } from "next"
-import type { PluggableList } from "unified"
 
 import createMDX from '@next/mdx'
-
-// Import remark plugins you want to use
-import remarkPlugins from "./remark-plugins.mjs"
-
-// Import remark mdx only plugins you want to use
-import remarkMdxPlugins from "./remarkmdx-plugins.mjs"
-
-// Import rehype plugins you want to use
-import rehypePlugins from "./rehype-plugins.mjs"
 
 /** @type { import('next').NextConfig } */
 const nextConfig: NextConfig = {
@@ -88,6 +78,8 @@ const nextConfig: NextConfig = {
     ]
   },
 
+  turbopack: {},
+
   webpack: (config) => {
     // to disable webpack warning if needed
     //config.infrastructureLogging = { level: "error" };
@@ -108,17 +100,20 @@ const withMDX = createMDX({
 
   options: {
 
+    // Plugins are referenced by package name so options stay serializable
+    // (required by Turbopack).
     remarkPlugins: [
-
-      ...remarkMdxPlugins,
-
-      ...remarkPlugins
-
-    ] as PluggableList,
-
+      "remark-frontmatter",
+      ["remark-mdx-frontmatter", { name: "frontmatter" }],
+      "remark-gfm",
+      "remark-github",
+      "remark-gemoji",
+    ],
     rehypePlugins: [
-      ...rehypePlugins
-    ] as PluggableList
+      "rehype-unwrap-images",
+      "rehype-slug",
+      "rehype-highlight",
+    ]
 
   }
 
