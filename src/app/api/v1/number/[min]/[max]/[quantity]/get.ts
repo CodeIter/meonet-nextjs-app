@@ -28,6 +28,8 @@ function parseBool(value: string | null): boolean | null {
   const v = value.toLowerCase();
   if (v === "true") return true;
   if (v === "false") return false;
+  if (v === "1") return true;
+  if (v === "0") return false;
   return null;
 }
 
