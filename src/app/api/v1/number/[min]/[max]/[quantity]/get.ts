@@ -41,7 +41,7 @@ function parseNumber(value: string, allowDecimal: boolean): Parsed | null {
     : /^(-?)(\d{1,15})()$/;
   const m = re.exec(value);
   if (!m) return null;
-  return { negative: m[1] === "-", int: m[2], frac: m[3] ?? "" };
+  return { negative: m[1] === "-", int: m[2] ?? "", frac: m[3] ?? "" };
 }
 
 // Value as an exact integer count of 10^-decimals units, e.g. -1.5 @ 2 -> -150n
