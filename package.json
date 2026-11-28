@@ -1,6 +1,6 @@
 {
   "name": "meonet-nextjs-app",
-  "version": "11.3.4",
+  "version": "11.4.3",
   "license": "MIT",
   "private": true,
   "description": "Next.js web app, blog, url shortener and pastebin",
